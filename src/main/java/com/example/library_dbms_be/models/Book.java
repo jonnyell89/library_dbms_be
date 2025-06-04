@@ -1,7 +1,10 @@
 package com.example.library_dbms_be.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity(name = "Books")
 public class Book {
@@ -9,13 +12,31 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "availability", nullable = false)
     private boolean availability;
-    private String author_name;
+
+    @Column(name = "author", nullable = false)
+    @JsonProperty("author_name")
+    private String author;
+
+    @Column(name = "title", nullable = false)
     private String title;
-    private Long cover;
-    private Long author_key;
-    private Long key;
-    private Long firstPublishYear;
+
+    @Column(name = "author_key", nullable = false)
+    private String authorKey;
+
+    @Column(name = "title_key", nullable = false)
+    @JsonProperty("key")
+    private String titleKey;
+
+    @Column(name = "first_publish_year")
+    private Integer firstPublishYear;
+
+    @Column(name = "cover")
+    @JsonProperty("cover_i")
+    private Integer cover;
 
     // cascade deletes/updates reservations automatically when a member is removed
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
@@ -38,12 +59,12 @@ public class Book {
         this.availability = availability;
     }
 
-    public String getAuthor_name() {
-        return author_name;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setAuthor_name(String author_name) {
-        this.author_name = author_name;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getTitle() {
@@ -54,36 +75,36 @@ public class Book {
         this.title = title;
     }
 
-    public Long getCover() {
-        return cover;
+    public String getAuthorKey() {
+        return authorKey;
     }
 
-    public void setCover(Long cover) {
-        this.cover = cover;
+    public void setAuthorKey(String authorKey) {
+        this.authorKey = authorKey;
     }
 
-    public Long getAuthor_key() {
-        return author_key;
+    public String getTitleKey() {
+        return titleKey;
     }
 
-    public void setAuthor_key(Long author_key) {
-        this.author_key = author_key;
+    public void setTitleKey(String titleKey) {
+        this.titleKey = titleKey;
     }
 
-    public Long getKey() {
-        return key;
-    }
-
-    public void setKey(Long key) {
-        this.key = key;
-    }
-
-    public Long getFirstPublishYear() {
+    public Integer getFirstPublishYear() {
         return firstPublishYear;
     }
 
-    public void setFirstPublishYear(Long firstPublishYear) {
+    public void setFirstPublishYear(Integer firstPublishYear) {
         this.firstPublishYear = firstPublishYear;
+    }
+
+    public Integer getCover() {
+        return cover;
+    }
+
+    public void setCover(Integer cover) {
+        this.cover = cover;
     }
 
     public List<Reservation> getReservations() {
