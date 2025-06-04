@@ -1,5 +1,6 @@
 package com.example.library_dbms_be.models;
 
+import com.example.library_dbms_be.enums.Status;
 import jakarta.persistence.*;
 
 @Entity(name = "Reservations")
@@ -9,8 +10,9 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private boolean status;
+    private Status status;
 
     @Column(name = "start_date", nullable = false)
     private String startDate;
@@ -30,11 +32,11 @@ public class Reservation {
         this.id = id;
     }
 
-    public boolean isStatus() {
+    public Status isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
