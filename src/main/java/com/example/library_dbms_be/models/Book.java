@@ -1,5 +1,6 @@
 package com.example.library_dbms_be.models;
 
+import com.example.library_dbms_be.enums.Availability;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -11,11 +12,12 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "book_id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "availability", nullable = false)
-    private boolean availability;
+    private Availability availability;
 
     @Column(name = "author", nullable = false)
     @JsonProperty("author_name")
@@ -51,11 +53,11 @@ public class Book {
         this.id = id;
     }
 
-    public boolean isAvailability() {
+    public Availability isAvailability() {
         return availability;
     }
 
-    public void setAvailability(boolean availability) {
+    public void setAvailability(Availability availability) {
         this.availability = availability;
     }
 
