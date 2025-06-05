@@ -13,7 +13,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
-    private Long id;
+    private Long bookId; // PRIMARY KEY
 
     @Enumerated(EnumType.STRING)
     @Column(name = "availability", nullable = false)
@@ -42,18 +42,18 @@ public class Book {
 
     // cascade deletes/updates reservations automatically when a member is removed
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Reservation> reservations;
+    @JsonIgnore // prevents conflict with ReservedBook.book
+    private List<ReservedBook> reservedBooks;
 
-    public Long getId() {
-        return id;
+    public Long getBookId() {
+        return bookId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
     }
 
-    public Availability isAvailability() {
+    public Availability getAvailability() {
         return availability;
     }
 
@@ -109,11 +109,25 @@ public class Book {
         this.cover = cover;
     }
 
-    public List<Reservation> getReservations() {
-        return reservations;
+    public List<ReservedBook> getReservedBooks() {
+        return reservedBooks;
     }
 
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
+    public void setReservedBooks(List<ReservedBook> reservedBooks) {
+        this.reservedBooks = reservedBooks;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "bookId=" + bookId +
+                ", availability=" + availability +
+                ", author='" + author + '\'' +
+                ", title='" + title + '\'' +
+                ", authorKey='" + authorKey + '\'' +
+                ", titleKey='" + titleKey + '\'' +
+                ", firstPublishYear=" + firstPublishYear +
+                ", cover=" + cover +
+                '}';
     }
 }
