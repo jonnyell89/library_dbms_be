@@ -16,13 +16,13 @@ public class Address {
     @Column(name = "line_1", nullable = false)
     private String line1;
 
-    @Column(name = "line_2", nullable = false)
+    @Column(name = "line_2")
     private String line2;
 
-    @Column(name = "city", nullable = false)
+    @Column(name = "city")
     private String city;
 
-    @Column(name = "county", nullable = false)
+    @Column(name = "county")
     private String county;
 
     @Column(name = "postcode", nullable = false)
