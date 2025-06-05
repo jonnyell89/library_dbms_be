@@ -1,59 +1,47 @@
 package com.example.library_dbms_be.models;
 
 import com.example.library_dbms_be.enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity(name = "Reservations")
 public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "reservation_id")
+    private Long reservationId; // PRIMARY KEY
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    @JsonIgnoreProperties("reservations") // prevents infinite JSON loops
+    private Member member; // FOREIGN KEY
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status;
 
     @Column(name = "start_date", nullable = false)
-    private String startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date", nullable = false)
-    private String endDate;
+    private LocalDate endDate;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    // cascade deletes/updates reservations automatically when a member is removed
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
+    @JsonIgnore // prevents conflict with ReservedBook.reservation
+    List<ReservedBook> reservedBooks;
 
-    public Long getId() {
-        return id;
+    public Long getReservationId() {
+        return reservationId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Status isStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setReservationId(Long reservationId) {
+        this.reservationId = reservationId;
     }
 
     public Member getMember() {
@@ -62,5 +50,47 @@ public class Reservation {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public List<ReservedBook> getReservedBooks() {
+        return reservedBooks;
+    }
+
+    public void setReservedBooks(List<ReservedBook> reservedBooks) {
+        this.reservedBooks = reservedBooks;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "reservationId=" + reservationId +
+                ", status=" + status +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
     }
 }
