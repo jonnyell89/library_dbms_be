@@ -10,7 +10,12 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "member_id")
+    private Long memberId; // PRIMARY KEY
+
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address address; // FOREIGN KEY
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -18,21 +23,25 @@ public class Member {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
-
     // cascade deletes/updates reservations automatically when a member is removed
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonIgnore // prevents conflict with Reservation.member
     private List<Reservation> reservations;
 
-    public Long getId() {
-        return id;
+    public Long getMemberId() {
+        return memberId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public String getName() {
@@ -51,19 +60,20 @@ public class Member {
         this.email = email;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public List<Reservation> getReservations() {
         return reservations;
     }
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "memberId=" + memberId +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
