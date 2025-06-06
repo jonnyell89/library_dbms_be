@@ -40,25 +40,29 @@ public class AddressService {
                 .findById(addressId)
                 .orElseThrow(() -> new EntityNotFoundException(("Address not found with addressId: " + addressId)));
 
-        if (Objects.nonNull(address.getLine1()) && !"".equalsIgnoreCase(address.getLine1())) {
-            existingAddress.setLine1(address.getLine1());
+        if (address.getLine1() != null && !address.getLine1().trim().isEmpty()) {
+            existingAddress.setLine1(address.getLine1().trim());
         }
 
-        if (Objects.nonNull(address.getLine2()) && !"".equalsIgnoreCase(address.getLine2())) {
-            existingAddress.setLine2(address.getLine2());
+        if (address.getLine2() != null && !address.getLine2().trim().isEmpty()) {
+            existingAddress.setLine2(address.getLine2().trim());
         }
 
-        if (Objects.nonNull(address.getCity()) && !"".equalsIgnoreCase(address.getCity())) {
-            existingAddress.setCity(address.getCity());
+        if (address.getCity() != null && !address.getCity().trim().isEmpty()) {
+            existingAddress.setCity(address.getCity().trim());
         }
 
-        if (Objects.nonNull(address.getCounty()) && !"".equalsIgnoreCase(address.getCounty())) {
-            existingAddress.setCounty(address.getCounty());
+        if (address.getCounty() != null && !address.getCounty().trim().isEmpty()) {
+            existingAddress.setCounty(address.getCounty().trim());
         }
 
-        if (Objects.nonNull(address.getPostcode()) && !"".equalsIgnoreCase(address.getPostcode())) {
-            existingAddress.setPostcode(address.getPostcode());
+        if (address.getPostcode() != null && !address.getPostcode().trim().isEmpty()) {
+            existingAddress.setPostcode(address.getPostcode().trim());
         }
+
+//        if (Objects.nonNull(address.getPostcode()) && !"".equalsIgnoreCase(address.getPostcode())) {
+//            existingAddress.setPostcode(address.getPostcode());
+//        }
 
         return addressRepository.save(existingAddress);
     }

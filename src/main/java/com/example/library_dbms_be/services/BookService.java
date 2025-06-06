@@ -6,6 +6,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BookService {
@@ -30,6 +31,44 @@ public class BookService {
         return bookRepository
                 .findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with bookId: " + bookId));
+    }
+
+    // UPDATE
+    public Book updateBookById(Book book, Long bookId) {
+
+        Book existingBook = bookRepository
+                .findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException(("Book not found with bookId: " + bookId)));
+
+        if (book.getAvailability() != null) {
+            existingBook.setAvailability(book.getAvailability());
+        }
+
+        if (book.getAuthor() != null && !book.getAuthor().trim().isEmpty()) {
+            existingBook.setAuthor(book.getAuthor().trim());
+        }
+
+        if (book.getTitle() != null && !book.getTitle().trim().isEmpty()) {
+            existingBook.setTitle(book.getTitle().trim());
+        }
+
+        if (book.getAuthorKey() != null && !book.getAuthorKey().trim().isEmpty()) {
+            existingBook.setAuthorKey(book.getAuthorKey().trim());
+        }
+
+        if (book.getTitleKey() != null && !book.getTitleKey().trim().isEmpty()) {
+            existingBook.setTitleKey(book.getTitleKey().trim());
+        }
+
+        if (book.getFirstPublishYear() != null) {
+            existingBook.setFirstPublishYear(book.getFirstPublishYear());
+        }
+
+        if (book.getCover() != null) {
+            existingBook.setCover(book.getCover());
+        }
+
+        return bookRepository.save(existingBook);
     }
 
     // DELETE

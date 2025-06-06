@@ -52,6 +52,41 @@ public class MemberService {
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with memberId: " + memberId));
     }
 
+    // UPDATE
+    public Member updateMemberById(Member member, Long memberId) {
+
+        Member existingMember = memberRepository
+                .findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with memberId: " + memberId));
+
+        if (member.getName() != null && !member.getName().trim().isEmpty()) {
+            existingMember.setName(member.getName());
+        }
+
+        if (member.getEmail() != null && !member.getEmail().trim().isEmpty()) {
+            existingMember.setEmail(member.getEmail());
+        }
+
+        Address incomingAddress = member.getAddress();
+
+        if (incomingAddress != null) {
+            // may or may not contain a null value
+            Optional<Address> existingAddress = addressRepository.findByLine1AndPostcode(
+                    incomingAddress.getLine1(),
+                    incomingAddress.getPostcode()
+            );
+
+            if (existingAddress.isPresent()) {
+                existingMember.setAddress(existingAddress.get());
+            } else {
+                Address savedAddress = addressRepository.save(incomingAddress);
+                existingMember.setAddress(savedAddress);
+            }
+        }
+
+        return memberRepository.save(existingMember);
+    }
+
     // DELETE
     public void deleteMemberById(Long memberId) {
         memberRepository.deleteById(memberId);
