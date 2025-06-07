@@ -10,10 +10,10 @@ import java.util.List;
 @Entity(name = "Books")
 public class Book {
 
-    @Id
+    @Id // Assigns PRIMARY KEY
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
-    private Long bookId; // PRIMARY KEY
+    private Long bookId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "availability", nullable = false)
@@ -40,9 +40,9 @@ public class Book {
     @JsonProperty("cover_i")
     private Integer cover;
 
-    // cascade deletes/updates reservations automatically when a member is removed
+    // Cascade deletes/updates reservations automatically when a member is removed.
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    @JsonIgnore // prevents conflict with ReservedBook.book
+    @JsonIgnore // Prevents recursive conflict with ReservedBook.book
     private List<ReservedBook> reservedBooks;
 
     public Long getBookId() {
@@ -128,6 +128,6 @@ public class Book {
                 ", titleKey='" + titleKey + '\'' +
                 ", firstPublishYear=" + firstPublishYear +
                 ", cover=" + cover +
-                '}';
+                '}'; // Reference to reservedBooks removed to prevent recursive conflict.
     }
 }

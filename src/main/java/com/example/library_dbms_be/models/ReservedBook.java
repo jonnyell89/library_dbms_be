@@ -6,20 +6,20 @@ import jakarta.persistence.*;
 @Entity(name = "ReservedBooks")
 public class ReservedBook {
 
-    @Id
+    @Id // Assigns PRIMARY KEY
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reserved_book_id")
-    private Long reservedBookId; // PRIMARY KEY
+    private Long reservedBookId;
 
     @ManyToOne
-    @JoinColumn(name = "reservation_id", nullable = false)
-    @JsonIgnoreProperties("reservedBooks") // prevents infinite JSON loops
-    private Reservation reservation; // FOREIGN KEY
+    @JoinColumn(name = "reservation_id", nullable = false) // Assigns FOREIGN KEY
+    @JsonIgnoreProperties("reservedBooks") // Prevents infinite JSON loops.
+    private Reservation reservation;
 
     @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
-    @JsonIgnoreProperties("reservedBooks") // prevents infinite JSON loops
-    private Book book; // FOREIGN KEY
+    @JoinColumn(name = "book_id", nullable = false) // Assigns FOREIGN KEY
+    @JsonIgnoreProperties("reservedBooks") // Prevents infinite JSON loops.
+    private Book book;
 
     public Long getReservedBookId() {
         return reservedBookId;
@@ -49,6 +49,6 @@ public class ReservedBook {
     public String toString() {
         return "ReservedBook{" +
                 "reservedBookId=" + reservedBookId +
-                '}';
+                '}'; // Reference to reservation and book removed to prevent recursive conflict.
     }
 }

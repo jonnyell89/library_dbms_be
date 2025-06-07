@@ -11,15 +11,15 @@ import java.util.List;
 @Entity(name = "Reservations")
 public class Reservation {
 
-    @Id
+    @Id // Assigns PRIMARY KEY
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
-    private Long reservationId; // PRIMARY KEY
+    private Long reservationId;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
-    @JsonIgnoreProperties("reservations") // prevents infinite JSON loops
-    private Member member; // FOREIGN KEY
+    @JoinColumn(name = "member_id") // Assigns FOREIGN KEY
+    @JsonIgnoreProperties("reservations") // Prevents infinite JSON loops.
+    private Member member;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -31,7 +31,7 @@ public class Reservation {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    // cascade deletes/updates reservations automatically when a member is removed
+    // cascade deletes/updates reservations automatically when a member is removed.
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
     @JsonIgnore // prevents conflict with ReservedBook.reservation
     List<ReservedBook> reservedBooks;
@@ -91,6 +91,6 @@ public class Reservation {
                 ", status=" + status +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                '}';
+                '}'; // Reference to member and reservedBooks removed to prevent recursive conflict.
     }
 }
