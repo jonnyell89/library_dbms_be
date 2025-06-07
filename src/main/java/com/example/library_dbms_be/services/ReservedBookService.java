@@ -18,7 +18,7 @@ public class ReservedBookService {
     public final ReservationRepository reservationRepository;
     public final BookRepository bookRepository;
 
-    ReservedBookService(ReservedBookRepository reservedBookRepository, ReservationRepository reservationRepository, BookRepository bookRepository) {
+    public ReservedBookService(ReservedBookRepository reservedBookRepository, ReservationRepository reservationRepository, BookRepository bookRepository) {
         this.reservedBookRepository = reservedBookRepository;
         this.reservationRepository = reservationRepository;
         this.bookRepository = bookRepository;
@@ -30,35 +30,25 @@ public class ReservedBookService {
         // Handles ReservedBook object's associated Reservation object.
         Reservation incomingReservation = reservedBook.getReservation();
 
-        // Checks for persisted Reservation.
-        Optional<Reservation> existingReservation = reservationRepository.findByStatusAndStartDateAndEndDate(
-                incomingReservation.getStatus(),
-                incomingReservation.getStartDate(),
-                incomingReservation.getEndDate()
-        );
+        if (incomingReservation != null && incomingReservation.getReservationId() != null) {
+            // Checks for persisted Reservation.
+            Reservation existingReservation = reservationRepository
+                    .findById(incomingReservation.getReservationId())
+                    .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + incomingReservation.getReservationId()));
 
-        if (existingReservation.isPresent()) {
-            reservedBook.setReservation(existingReservation.get()); // Sets ReservedBook with persisted Reservation.
-        } else {
-            Reservation savedReservation = reservationRepository.save(incomingReservation); // Creates a new row in reservationRepository.
-            reservedBook.setReservation(savedReservation); // Sets ReservedBook with newly persisted Reservation.
+            reservedBook.setReservation(existingReservation); // Sets ReservedBook with persisted Reservation.
         }
 
         // Handles ReservedBook object's associated Book object.
         Book incomingBook = reservedBook.getBook();
 
-        // Checks for persisted Book.
-        Optional<Book> existingBook = bookRepository.findByAvailabilityAndAuthorAndTitle(
-                incomingBook.getAvailability(),
-                incomingBook.getAuthorKey(),
-                incomingBook.getTitle()
-        );
+        if (incomingBook != null && incomingBook.getBookId() != null) {
+            // Checks for persisted Book.
+            Book existingBook = bookRepository
+                    .findById(incomingBook.getBookId())
+                    .orElseThrow(() -> new EntityNotFoundException("Book not found with bookId: " + incomingBook.getBookId()));
 
-        if (existingBook.isPresent()) {
-            reservedBook.setBook(existingBook.get()); // Sets ReservedBook with persisted Book.
-        } else {
-            Book savedBook = bookRepository.save(incomingBook); // Creates a new row in bookRepository.
-            reservedBook.setBook(savedBook); // Sets ReservedBook with newly persisted Book.
+            reservedBook.setBook(existingBook); // Sets ReservedBook with persisted Book.
         }
 
         // Creates a new row in reservedBookRepository.
