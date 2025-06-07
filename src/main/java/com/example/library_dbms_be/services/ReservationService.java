@@ -25,63 +25,60 @@ public class ReservationService {
     // CREATE
     public Reservation createReservation(Reservation reservation) {
 
+        // Handles Reservation object's associated Member object.
         Member incomingMember = reservation.getMember();
 
         if (incomingMember != null && incomingMember.getName() != null && incomingMember.getEmail() != null) {
-            // Checks memberRepository for a match
+            // Checks for persisted Member.
             Optional<Member> existingMember = memberRepository.findByNameAndEmail(
                     incomingMember.getName(),
                     incomingMember.getEmail()
             );
 
             if (existingMember.isPresent()) {
-                // Sets the already persisted member with an ID back to the reservation
-                reservation.setMember(existingMember.get());
+                reservation.setMember(existingMember.get()); // Sets Reservation with persisted Member.
             } else {
-                // Saves the member to the memberRepository, assigning it an ID.
-                Member savedMember = memberRepository.save(incomingMember);
-                // Sets the newly persisted member now with an ID back to the reservation
-                reservation.setMember(savedMember);
+                Member savedMember = memberRepository.save(incomingMember); // Creates a new row in memberRepository.
+                reservation.setMember(savedMember); // Sets Reservation with newly persisted Member.
             }
         }
 
+        // Creates a new row in reservationRepository.
         return reservationRepository.save(reservation);
     }
 
     // READ
     public List<Reservation> getAllReservations() {
-
         return reservationRepository.findAll();
-
     }
 
     public Reservation getReservationById(Long reservationId) {
-
         return reservationRepository
                 .findById(reservationId)
                 .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + reservationId));
-
     }
 
     // UPDATE
     public Reservation updateReservationById(Reservation reservation, Long reservationId) {
 
+        // Checks for persisted Reservation.
         Reservation existingReservation = reservationRepository
                 .findById(reservationId)
                 .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + reservationId));
 
         if (reservation.getStatus() != null) {
-            existingReservation.setStatus(reservation.getStatus());
+            existingReservation.setStatus(reservation.getStatus()); // Sets persisted Reservation with updated status.
         }
 
         if (reservation.getStartDate() != null) {
-            existingReservation.setStartDate(reservation.getStartDate());
+            existingReservation.setStartDate(reservation.getStartDate()); // Sets persisted Reservation with updated startDate.
         }
 
         if (reservation.getEndDate() != null) {
-            existingReservation.setEndDate(reservation.getEndDate());
+            existingReservation.setEndDate(reservation.getEndDate()); // Sets persisted Reservation with updated endDate.
         }
 
+        // Creates a new row in reservationRepository.
         return reservationRepository.save(existingReservation);
     }
 

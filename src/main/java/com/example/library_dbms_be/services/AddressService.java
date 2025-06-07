@@ -36,34 +36,36 @@ public class AddressService {
     // UPDATE
     public Address updateAddressById(Address address, Long addressId) {
 
+        // Checks for persisted Address.
         Address existingAddress = addressRepository
                 .findById(addressId)
                 .orElseThrow(() -> new EntityNotFoundException(("Address not found with addressId: " + addressId)));
 
         if (address.getLine1() != null && !address.getLine1().trim().isEmpty()) {
-            existingAddress.setLine1(address.getLine1().trim());
+            existingAddress.setLine1(address.getLine1().trim()); // Sets persisted Address with updated line1.
         }
 
         if (address.getLine2() != null && !address.getLine2().trim().isEmpty()) {
-            existingAddress.setLine2(address.getLine2().trim());
+            existingAddress.setLine2(address.getLine2().trim()); // Sets persisted Address with updated line2.
         }
 
         if (address.getCity() != null && !address.getCity().trim().isEmpty()) {
-            existingAddress.setCity(address.getCity().trim());
+            existingAddress.setCity(address.getCity().trim()); // Sets persisted Address with updated city.
         }
 
         if (address.getCounty() != null && !address.getCounty().trim().isEmpty()) {
-            existingAddress.setCounty(address.getCounty().trim());
+            existingAddress.setCounty(address.getCounty().trim()); // Sets persisted Address with updated county.
         }
 
         if (address.getPostcode() != null && !address.getPostcode().trim().isEmpty()) {
-            existingAddress.setPostcode(address.getPostcode().trim());
+            existingAddress.setPostcode(address.getPostcode().trim()); // Sets persisted Address with updated postcode.
         }
 
 //        if (Objects.nonNull(address.getPostcode()) && !"".equalsIgnoreCase(address.getPostcode())) {
 //            existingAddress.setPostcode(address.getPostcode());
 //        }
 
+        // Creates a new row in addressRepository.
         return addressRepository.save(existingAddress);
     }
 

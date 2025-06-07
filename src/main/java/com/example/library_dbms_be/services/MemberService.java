@@ -24,20 +24,23 @@ public class MemberService {
     // CREATE
     public Member createMember(Member member) {
 
+        // Handles Member object's associated Address object.
         Address incomingAddress = member.getAddress();
 
-        // may or may not contain a null value
+        // Checks for persisted Address.
         Optional<Address> existingAddress = addressRepository.findByLine1AndPostcode(
                 incomingAddress.getLine1(),
                 incomingAddress.getPostcode()
         );
 
         if (existingAddress.isPresent()) {
-            member.setAddress(existingAddress.get());
+            member.setAddress(existingAddress.get()); // Sets Member with persisted Address.
         } else {
-            addressRepository.save(incomingAddress);
+            Address savedAddress = addressRepository.save(incomingAddress); // Creates a new row in addressRepository.
+            member.setAddress((savedAddress)); // Sets Member with newly persisted Address.
         }
 
+        // Creates a new row in memberRepository.
         return memberRepository.save(member);
     }
 
@@ -55,35 +58,38 @@ public class MemberService {
     // UPDATE
     public Member updateMemberById(Member member, Long memberId) {
 
+        // Checks for persisted Member.
         Member existingMember = memberRepository
                 .findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with memberId: " + memberId));
 
         if (member.getName() != null && !member.getName().trim().isEmpty()) {
-            existingMember.setName(member.getName());
+            existingMember.setName(member.getName()); // Sets persisted Member with updated name.
         }
 
         if (member.getEmail() != null && !member.getEmail().trim().isEmpty()) {
-            existingMember.setEmail(member.getEmail());
+            existingMember.setEmail(member.getEmail()); // Sets persisted Member with updated email.
         }
 
+        // Handles Member object's associated Address object.
         Address incomingAddress = member.getAddress();
 
         if (incomingAddress != null) {
-            // may or may not contain a null value
+            // Checks for persisted Address.
             Optional<Address> existingAddress = addressRepository.findByLine1AndPostcode(
                     incomingAddress.getLine1(),
                     incomingAddress.getPostcode()
             );
 
             if (existingAddress.isPresent()) {
-                existingMember.setAddress(existingAddress.get());
+                existingMember.setAddress(existingAddress.get()); // Sets persisted Member with persisted Address.
             } else {
-                Address savedAddress = addressRepository.save(incomingAddress);
-                existingMember.setAddress(savedAddress);
+                Address savedAddress = addressRepository.save(incomingAddress); // Creates a new row in addressRepository.
+                existingMember.setAddress(savedAddress); // Sets persisted Member with newly persisted Address.
             }
         }
 
+        // Creates a new row in memberRepository.
         return memberRepository.save(existingMember);
     }
 

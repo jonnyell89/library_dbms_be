@@ -36,36 +36,37 @@ public class BookService {
     // UPDATE
     public Book updateBookById(Book book, Long bookId) {
 
+        // Checks for persisted Book.
         Book existingBook = bookRepository
                 .findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException(("Book not found with bookId: " + bookId)));
 
         if (book.getAvailability() != null) {
-            existingBook.setAvailability(book.getAvailability());
+            existingBook.setAvailability(book.getAvailability()); // Sets persisted Book with updated availability.
         }
 
         if (book.getAuthor() != null && !book.getAuthor().trim().isEmpty()) {
-            existingBook.setAuthor(book.getAuthor().trim());
+            existingBook.setAuthor(book.getAuthor().trim()); // Sets persisted Book with updated author.
         }
 
         if (book.getTitle() != null && !book.getTitle().trim().isEmpty()) {
-            existingBook.setTitle(book.getTitle().trim());
+            existingBook.setTitle(book.getTitle().trim()); // Sets persisted Book with updated title.
         }
 
         if (book.getAuthorKey() != null && !book.getAuthorKey().trim().isEmpty()) {
-            existingBook.setAuthorKey(book.getAuthorKey().trim());
+            existingBook.setAuthorKey(book.getAuthorKey().trim()); // Sets persisted Book with updated authorKey.
         }
 
         if (book.getTitleKey() != null && !book.getTitleKey().trim().isEmpty()) {
-            existingBook.setTitleKey(book.getTitleKey().trim());
+            existingBook.setTitleKey(book.getTitleKey().trim()); // Sets persisted Book with updated titleKey.
         }
 
         if (book.getFirstPublishYear() != null) {
-            existingBook.setFirstPublishYear(book.getFirstPublishYear());
+            existingBook.setFirstPublishYear(book.getFirstPublishYear()); // Sets persisted Book with updated firstPublishYear.
         }
 
         if (book.getCover() != null) {
-            existingBook.setCover(book.getCover());
+            existingBook.setCover(book.getCover()); // Sets persisted Book with updated cover.
         }
 
         return bookRepository.save(existingBook);
