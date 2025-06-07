@@ -11,6 +11,4 @@ import java.util.Optional;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    Optional<Reservation> findByStatusAndStartDateAndEndDate(Status status, LocalDate startDate, LocalDate endDate);
-
 }
