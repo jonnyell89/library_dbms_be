@@ -8,10 +8,10 @@ import java.util.List;
 @Entity(name = "Addresses")
 public class Address {
 
-    @Id
+    @Id // Assigns PRIMARY KEY
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "address_id")
-    private Long addressId; // PRIMARY KEY
+    private Long addressId;
 
     @Column(name = "line_1", nullable = false)
     private String line1;
@@ -28,9 +28,9 @@ public class Address {
     @Column(name = "postcode", nullable = false)
     private String postcode;
 
-    // cascade deletes/updates reservations automatically when a member is removed
+    // Cascade deletes/updates reservations automatically when a member is removed.
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
-    @JsonIgnore // prevents conflict with Member.address
+    @JsonIgnore // Prevents recursive conflict with Member.address
     private List<Member> members;
 
     public Long getAddressId() {
@@ -98,6 +98,6 @@ public class Address {
                 ", city='" + city + '\'' +
                 ", county='" + county + '\'' +
                 ", postcode='" + postcode + '\'' +
-                '}';
+                '}'; // Reference to members removed to prevent recursive conflict.
     }
 }
