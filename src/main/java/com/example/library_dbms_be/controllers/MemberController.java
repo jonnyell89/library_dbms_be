@@ -35,7 +35,6 @@ public class MemberController {
 
     // UPDATE
 
-
     // DELETE
     @DeleteMapping("/{id}") // ("/api/members/{id}"
     public String deleteMemberById(@PathVariable Long memberId) {
