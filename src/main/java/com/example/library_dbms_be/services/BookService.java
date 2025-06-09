@@ -33,7 +33,7 @@ public class BookService {
     }
 
     // UPDATE
-    public Book updateBookById(Book book, Long bookId) {
+    public Book updateBookById(Long bookId, Book book) {
 
         // Checks for persisted Book.
         Book existingBook = bookRepository
@@ -68,6 +68,7 @@ public class BookService {
             existingBook.setCover(book.getCover()); // Sets persisted Book with updated cover.
         }
 
+        // Creates a new row, or updates an existing row, in bookRepository.
         return bookRepository.save(existingBook);
     }
 

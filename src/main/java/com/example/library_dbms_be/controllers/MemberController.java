@@ -28,15 +28,19 @@ public class MemberController {
         return memberService.getAllMembers();
     }
 
-    @GetMapping("/{id}") // ("/api/members/{id}")
-    public Member getMemberById(Long memberId) {
+    @GetMapping("/{memberId}") // ("/api/members/{memberId}")
+    public Member getMemberById(@PathVariable Long memberId) {
         return memberService.getMemberById(memberId);
     }
 
     // UPDATE
+    @PutMapping("/{memberId}") // ("/api/members/{memberId}")
+    public Member updateMemberById(@PathVariable Long memberId, @RequestBody Member member) {
+        return memberService.updateMemberById(memberId, member);
+    }
 
     // DELETE
-    @DeleteMapping("/{id}") // ("/api/members/{id}"
+    @DeleteMapping("/{memberId}") // ("/api/members/{memberId}"
     public String deleteMemberById(@PathVariable Long memberId) {
         memberService.deleteMemberById(memberId);
         return String.format("Member deleted with ID: " + memberId);

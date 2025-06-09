@@ -33,7 +33,7 @@ public class AddressService {
     }
 
     // UPDATE
-    public Address updateAddressById(Address address, Long addressId) {
+    public Address updateAddressById(Long addressId, Address address) {
 
         // Checks for persisted Address.
         Address existingAddress = addressRepository
@@ -64,7 +64,7 @@ public class AddressService {
 //            existingAddress.setPostcode(address.getPostcode());
 //        }
 
-        // Creates a new row in addressRepository.
+        // Creates a new row, or updates an existing row, in addressRepository.
         return addressRepository.save(existingAddress);
     }
 
