@@ -7,38 +7,42 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reservedbooks")
+@RequestMapping("/api/reserved-books")
 public class ReservedBookController {
 
-    private final ReservedBookService reservedBookSerivce;
+    private final ReservedBookService reservedBookService;
 
     ReservedBookController(ReservedBookService reservedBookService) {
-        this.reservedBookSerivce = reservedBookService;
+        this.reservedBookService = reservedBookService;
     }
 
     // CREATE
-    @PostMapping // ("/api/reservedbooks")
+    @PostMapping // ("/api/reserved-books")
     public ReservedBook createReservedBooks(@RequestBody ReservedBook reservedBook) {
-        return reservedBookSerivce.createReservedBook(reservedBook);
+        return reservedBookService.createReservedBook(reservedBook);
     }
 
     // READ
-    @GetMapping // ("/api/reservedbooks")
+    @GetMapping // ("/api/reserved-books")
     public List<ReservedBook> getAllReservedBooks() {
-        return reservedBookSerivce.getAllReservedBooks();
+        return reservedBookService.getAllReservedBooks();
     }
 
-    @GetMapping("/{id}") // ("/api/reservedbooks/{id}")
-    public ReservedBook getReservedBookById(Long reservedBookId) {
-        return reservedBookSerivce.getReservedBookById(reservedBookId);
+    @GetMapping("/{reservedBookId}") // ("/api/reserved-books/{reservedBookId}")
+    public ReservedBook getReservedBookById(@PathVariable Long reservedBookId) {
+        return reservedBookService.getReservedBookById(reservedBookId);
     }
 
     // UPDATE
+    @PutMapping("/{reservedBookId}") // ("/api/reserved-books/{reservedBookId}")
+    public ReservedBook updateReservedBook(@PathVariable Long reservedBookId, @RequestBody ReservedBook reservedBook) {
+        return reservedBookService.updateReservedBookById(reservedBookId, reservedBook);
+    }
 
     // DELETE
-    @DeleteMapping("/{id}") // ("/api/reservedbooks/{id}")
+    @DeleteMapping("/{reservedBookId}") // ("/api/reserved-books/{reservedBookId}")
     public String deleteReservedBookById(@PathVariable Long reservedBookId) {
-        reservedBookSerivce.deleteReservedBookById(reservedBookId);
+        reservedBookService.deleteReservedBookById(reservedBookId);
         return String.format("ReservedBook deleted with ID: " + reservedBookId);
     }
 }
