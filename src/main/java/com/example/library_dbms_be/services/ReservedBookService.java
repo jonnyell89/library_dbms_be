@@ -10,7 +10,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReservedBookService {
@@ -99,6 +98,7 @@ public class ReservedBookService {
             existingReservedBook.setBook(existingBook); // Sets ReservedBook with persisted Book.
         }
 
+        // Creates a new row in reservedBookRepository.
         return reservedBookRepository.save(existingReservedBook);
     }
 
