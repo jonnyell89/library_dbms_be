@@ -56,7 +56,7 @@ public class MemberService {
     }
 
     // UPDATE
-    public Member updateMemberById(Member member, Long memberId) {
+    public Member updateMemberById(Long memberId, Member member) {
 
         // Checks for persisted Member.
         Member existingMember = memberRepository
@@ -89,7 +89,7 @@ public class MemberService {
             }
         }
 
-        // Creates a new row in memberRepository.
+        // Creates a new row, or updates an existing row, in memberRepository.
         return memberRepository.save(existingMember);
     }
 

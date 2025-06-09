@@ -28,15 +28,19 @@ public class AddressController {
         return addressService.getAllAddresses();
     }
 
-    @GetMapping("/{id}") // ("/api/addresses/{id}")
-    public Address getAddressById(Long addressId) {
+    @GetMapping("/{addressId}") // ("/api/addresses/{addressId}")
+    public Address getAddressById(@PathVariable Long addressId) {
         return addressService.getAddressById(addressId);
     }
 
     // UPDATE
+    @PutMapping("/{addressId}") // ("/api/addresses/{addressId}")
+    public Address updateAddressById(@PathVariable Long addressId, @RequestBody Address address) {
+        return addressService.updateAddressById(addressId, address);
+    }
 
     // DELETE
-    @DeleteMapping("/{id}") // ("/api/addresses/{id}")
+    @DeleteMapping("/{addressId}") // ("/api/addresses/{addressId}")
     public String deleteAddressById(@PathVariable Long addressId) {
         addressService.deleteAddressById(addressId);
         return String.format("Address deleted with ID: " + addressId);
