@@ -28,15 +28,19 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
-    @GetMapping("/{id}") // ("/api/books/{id}")
-    public Book getBookById(Long bookId) {
+    @GetMapping("/{bookId}") // ("/api/books/{bookId}")
+    public Book getBookById(@PathVariable Long bookId) {
         return bookService.getBookById(bookId);
     }
 
     // UPDATE
+    @PutMapping("/{bookId}") // ("/api/books/{bookId}")
+    public Book updateBookById(@PathVariable Long bookId, @RequestBody Book book) {
+        return bookService.updateBookById(bookId, book);
+    }
 
     // DELETE
-    @DeleteMapping("/{id}") // ("/api/books/{id}")
+    @DeleteMapping("/{bookId}") // ("/api/books/{bookId}")
     public String deleteBookById(@PathVariable Long bookId) {
         bookService.deleteBook(bookId);
         return String.format("Book deleted with ID: " + bookId);

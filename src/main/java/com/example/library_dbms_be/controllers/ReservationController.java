@@ -28,15 +28,19 @@ public class ReservationController {
         return reservationService.getAllReservations();
     }
 
-    @GetMapping("/{id}") // ("/api/reservations/{id}")
-    public Reservation getReservationById(Long reservationId) {
+    @GetMapping("/{reservationId}") // ("/api/reservations/{reservationId}")
+    public Reservation getReservationById(@PathVariable Long reservationId) {
         return reservationService.getReservationById(reservationId);
     }
 
     // UPDATE
+    @PutMapping("/{reservationId}") // ("/api/reservations/{reservationId}")
+    public Reservation updateReservationById(@PathVariable Long reservationId, @RequestBody Reservation reservation) {
+        return reservationService.updateReservationById(reservationId, reservation);
+    }
 
     // DELETE
-    @DeleteMapping("/{id}") // ("/api/reservations/{id}")
+    @DeleteMapping("/{reservationId}") // ("/api/reservations/{reservationId}")
     public String deleteReservationById(@PathVariable Long reservationId) {
         reservationService.deleteReservationById(reservationId);
         return String.format("Reservation deleted with ID: " + reservationId);

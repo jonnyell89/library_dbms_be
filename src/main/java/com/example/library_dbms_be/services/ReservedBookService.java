@@ -68,7 +68,7 @@ public class ReservedBookService {
 
 
     // UPDATE
-    public ReservedBook updateReservedBookById(ReservedBook reservedBook, Long reservedBookId) {
+    public ReservedBook updateReservedBookById(Long reservedBookId, ReservedBook reservedBook) {
 
         ReservedBook existingReservedBook = reservedBookRepository
                 .findById(reservedBookId)
@@ -98,7 +98,7 @@ public class ReservedBookService {
             existingReservedBook.setBook(existingBook); // Sets ReservedBook with persisted Book.
         }
 
-        // Creates a new row in reservedBookRepository.
+        // Creates a new row, or updates an existing row, in reservedBookRepository.
         return reservedBookRepository.save(existingReservedBook);
     }
 

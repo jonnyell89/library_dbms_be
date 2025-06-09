@@ -58,7 +58,7 @@ public class ReservationService {
     }
 
     // UPDATE
-    public Reservation updateReservationById(Reservation reservation, Long reservationId) {
+    public Reservation updateReservationById(Long reservationId, Reservation reservation) {
 
         // Checks for persisted Reservation.
         Reservation existingReservation = reservationRepository
@@ -77,7 +77,7 @@ public class ReservationService {
             existingReservation.setEndDate(reservation.getEndDate()); // Sets persisted Reservation with updated endDate.
         }
 
-        // Creates a new row in reservationRepository.
+        // Creates a new row, or updates an existing row, in reservationRepository.
         return reservationRepository.save(existingReservation);
     }
 
