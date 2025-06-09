@@ -35,8 +35,6 @@ public class AddressController {
 
     // UPDATE
 
-
-
     // DELETE
     @DeleteMapping("/{id}") // ("/api/addresses/{id}")
     public String deleteAddressById(@PathVariable Long addressId) {

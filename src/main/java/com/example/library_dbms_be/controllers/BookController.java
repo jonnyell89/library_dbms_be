@@ -35,8 +35,6 @@ public class BookController {
 
     // UPDATE
 
-
-
     // DELETE
     @DeleteMapping("/{id}") // ("/api/books/{id}")
     public String deleteBookById(@PathVariable Long bookId) {
