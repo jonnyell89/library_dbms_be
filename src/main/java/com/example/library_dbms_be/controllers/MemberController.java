@@ -38,7 +38,8 @@ public class MemberController {
 
     // DELETE
     @DeleteMapping("/{id}") // ("/api/members/{id}"
-    public String deleteCustomerById(@PathVariable Long memberId) {
+    public String deleteMemberById(@PathVariable Long memberId) {
+        memberService.deleteMemberById(memberId);
         return String.format("Member deleted with ID: " + memberId);
     }
 }
