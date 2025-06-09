@@ -28,7 +28,7 @@ public class AddressController {
         return addressService.getAllAddresses();
     }
 
-    @GetMapping("/api/addresses/{id}")
+    @GetMapping("/{id}") // ("/api/addresses/{id}")
     public Address getAddressById(Long addressId) {
         return addressService.getAddressById(addressId);
     }
@@ -38,8 +38,8 @@ public class AddressController {
 
 
     // DELETE
-    @DeleteMapping("/api/addresses/{id}")
-    public String deleteAddressById(Long addressId) {
+    @DeleteMapping("/{id}") // ("/api/addresses/{id}")
+    public String deleteAddressById(@PathVariable Long addressId) {
         addressService.deleteAddressById(addressId);
         return String.format("Address deleted with ID: " + addressId);
     }

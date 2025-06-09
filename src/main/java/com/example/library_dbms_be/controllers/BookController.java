@@ -28,7 +28,7 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
-    @GetMapping("/api/books/{id}")
+    @GetMapping("/{id}") // ("/api/books/{id}")
     public Book getBookById(Long bookId) {
         return bookService.getBookById(bookId);
     }
@@ -38,8 +38,8 @@ public class BookController {
 
 
     // DELETE
-    @DeleteMapping("/api/books/{id}")
-    public String deleteBookById(Long bookId) {
+    @DeleteMapping("/{id}") // ("/api/books/{id}")
+    public String deleteBookById(@PathVariable Long bookId) {
         bookService.deleteBook(bookId);
         return String.format("Book deleted with ID: " + bookId);
     }
