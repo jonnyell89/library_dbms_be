@@ -55,6 +55,12 @@ public class MemberService {
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with memberId: " + memberId));
     }
 
+    public Member getMemberByNameAndEmail(Member member) {
+        return memberRepository
+                .findByNameAndEmail(member.getName(), member.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with name: " + member.getName() + ", and email: " + member.getEmail()));
+    }
+
     // UPDATE
     public Member updateMemberById(Long memberId, Member member) {
 
