@@ -55,10 +55,11 @@ public class MemberService {
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with memberId: " + memberId));
     }
 
-    public Member getMemberByNameAndEmail(Member member) {
+    // GET http://localhost:8080/api/members/search?name=Jonny&email=jonny@email.com
+    public Member getMemberByNameAndEmail(String name, String email) {
         return memberRepository
-                .findByNameAndEmail(member.getName(), member.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("Member not found with name: " + member.getName() + ", and email: " + member.getEmail()));
+                .findByNameAndEmail(name, email)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Member not found with name: %s, and email: %s", name, email)));
     }
 
     // UPDATE
