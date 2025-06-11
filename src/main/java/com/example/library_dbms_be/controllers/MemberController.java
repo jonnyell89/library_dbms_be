@@ -33,6 +33,12 @@ public class MemberController {
         return memberService.getMemberById(memberId);
     }
 
+    // GET http://localhost:8080/api/members/search?name=Jonny&email=jonny@email.com
+    @GetMapping("/search")
+    public Member getMemberByNameAndEmail(@RequestParam String name, @RequestParam String email) {
+        return memberService.getMemberByNameAndEmail(name, email);
+    }
+
     // UPDATE
     @PutMapping("/{memberId}") // ("/api/members/{memberId}")
     public Member updateMemberById(@PathVariable Long memberId, @RequestBody Member member) {
