@@ -8,24 +8,24 @@ import com.example.library_dbms_be.models.Member;
 
 public class MemberMapper {
 
-    public static Member toModel(MemberRequestDTO dto) {
+    public static Member toModel(MemberRequestDTO memberRequestDTO) {
 
         Address address = new Address();
-        address.setLine1(dto.getAddress().getLine1());
-        address.setLine2(dto.getAddress().getLine2());
-        address.setCity(dto.getAddress().getCity());
-        address.setCounty(dto.getAddress().getCounty());
-        address.setPostcode(dto.getAddress().getPostcode());
+        address.setLine1(memberRequestDTO.getAddress().getLine1());
+        address.setLine2(memberRequestDTO.getAddress().getLine2());
+        address.setCity(memberRequestDTO.getAddress().getCity());
+        address.setCounty(memberRequestDTO.getAddress().getCounty());
+        address.setPostcode(memberRequestDTO.getAddress().getPostcode());
 
         Member member = new Member();
-        member.setName(dto.getName());
-        member.setEmail(dto.getEmail());
+        member.setName(memberRequestDTO.getName());
+        member.setEmail(memberRequestDTO.getEmail());
         member.setAddress(address);
 
         return member;
     }
 
-    public static MemberResponseDTO toDTO(Member member) {
+    public static MemberResponseDTO toMemberResponseDTO(Member member) {
 
         AddressRequestDTO addressRequestDTO = new AddressRequestDTO();
         addressRequestDTO.setLine1(member.getAddress().getLine1());

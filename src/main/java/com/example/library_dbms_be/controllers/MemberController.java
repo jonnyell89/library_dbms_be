@@ -1,5 +1,8 @@
 package com.example.library_dbms_be.controllers;
 
+import com.example.library_dbms_be.dtos.MemberRequestDTO;
+import com.example.library_dbms_be.dtos.MemberResponseDTO;
+import com.example.library_dbms_be.mappers.MemberMapper;
 import com.example.library_dbms_be.models.Member;
 import com.example.library_dbms_be.services.MemberService;
 import org.springframework.web.bind.annotation.*;
@@ -18,31 +21,37 @@ public class MemberController {
 
     // CREATE
     @PostMapping // ("/api/members")
-    public Member createMember(@RequestBody Member member) {
-        return memberService.createMember(member);
+    public MemberResponseDTO createMember(@RequestBody MemberRequestDTO memberRequestDTO) {
+        return memberService.createMember(memberRequestDTO);
     }
 
     // READ
     @GetMapping // ("/api/members")
-    public List<Member> getAllMembers() {
-        return memberService.getAllMembers();
-    }
+    public List<MemberResponseDTO> getAllMembers() {
+        return memberService.getAllMembers()
+                .stream()
+                .map(MemberMapper::toMemberResponseDTO)
+                .toList();
+    } // Converting Member objects to DTOs -> Stream added with help from ChatGPT
 
     @GetMapping("/{memberId}") // ("/api/members/{memberId}")
-    public Member getMemberById(@PathVariable Long memberId) {
-        return memberService.getMemberById(memberId);
+    public MemberResponseDTO getMemberById(@PathVariable Long memberId) {
+        Member member = memberService.getMemberById(memberId);
+        return MemberMapper.toMemberResponseDTO(member);
     }
 
     // GET http://localhost:8080/api/members/search?name=Jonny&email=jonny@email.com
     @GetMapping("/search")
-    public Member getMemberByNameAndEmail(@RequestParam String name, @RequestParam String email) {
-        return memberService.getMemberByNameAndEmail(name, email);
+    public MemberResponseDTO getMemberByNameAndEmail(@RequestParam String name, @RequestParam String email) {
+        Member member = memberService.getMemberByNameAndEmail(name, email);
+        return MemberMapper.toMemberResponseDTO(member);
     }
 
     // UPDATE
     @PutMapping("/{memberId}") // ("/api/members/{memberId}")
-    public Member updateMemberById(@PathVariable Long memberId, @RequestBody Member member) {
-        return memberService.updateMemberById(memberId, member);
+    public MemberResponseDTO updateMemberById(@PathVariable Long memberId, @RequestBody MemberRequestDTO memberRequestDTO) {
+        Member member = memberService.updateMemberById(memberId, memberRequestDTO);
+        return MemberMapper.toMemberResponseDTO(member);
     }
 
     // DELETE

@@ -1,5 +1,8 @@
 package com.example.library_dbms_be.controllers;
 
+import com.example.library_dbms_be.dtos.AddressRequestDTO;
+import com.example.library_dbms_be.dtos.AddressResponseDTO;
+import com.example.library_dbms_be.mappers.AddressMapper;
 import com.example.library_dbms_be.models.Address;
 import com.example.library_dbms_be.services.AddressService;
 import org.springframework.web.bind.annotation.*;
@@ -18,25 +21,30 @@ public class AddressController {
 
     // CREATE
     @PostMapping // ("/api/addresses")
-    public Address createAddress(@RequestBody Address address) {
-        return addressService.createAddress(address);
+    public AddressResponseDTO createAddress(@RequestBody AddressRequestDTO addressRequestDTO) {
+        return addressService.createAddress(addressRequestDTO);
     }
 
     // READ
     @GetMapping // ("/api/addresses")
-    public List<Address> getAllAddresses() {
-        return addressService.getAllAddresses();
-    }
+    public List<AddressResponseDTO> getAllAddresses() {
+        return addressService.getAllAddresses()
+                .stream()
+                .map(AddressMapper::toAddressResponseDTO)
+                .toList();
+    } // Converting Address objects to DTOs -> Stream added with help from ChatGPT
 
     @GetMapping("/{addressId}") // ("/api/addresses/{addressId}")
-    public Address getAddressById(@PathVariable Long addressId) {
-        return addressService.getAddressById(addressId);
+    public AddressResponseDTO getAddressById(@PathVariable Long addressId) {
+        Address address = addressService.getAddressById(addressId);
+        return AddressMapper.toAddressResponseDTO(address);
     }
 
     // UPDATE
     @PutMapping("/{addressId}") // ("/api/addresses/{addressId}")
-    public Address updateAddressById(@PathVariable Long addressId, @RequestBody Address address) {
-        return addressService.updateAddressById(addressId, address);
+    public AddressResponseDTO updateAddressById(@PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO) {
+        Address address = addressService.updateAddressById(addressId, addressRequestDTO);
+        return AddressMapper.toAddressResponseDTO(address);
     }
 
     // DELETE

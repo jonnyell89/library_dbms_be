@@ -1,5 +1,8 @@
 package com.example.library_dbms_be.services;
 
+import com.example.library_dbms_be.dtos.AddressRequestDTO;
+import com.example.library_dbms_be.dtos.AddressResponseDTO;
+import com.example.library_dbms_be.mappers.AddressMapper;
 import com.example.library_dbms_be.models.Address;
 import com.example.library_dbms_be.repositories.AddressRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,8 +20,16 @@ public class AddressService {
     }
 
     // CREATE
-    public Address createAddress(Address address) {
-        return addressRepository.save(address);
+    public AddressResponseDTO createAddress(AddressRequestDTO addressRequestDTO) {
+
+        // Maps the addressRequestDTO to an Address object.
+        Address address = AddressMapper.toModel(addressRequestDTO);
+
+        // Saves the Address object to the addressRepository.
+        Address savedAddress = addressRepository.save(address);
+
+        // Maps the Address object to an AddressResponseDTO.
+        return AddressMapper.toAddressResponseDTO(savedAddress);
     }
 
     // READ
@@ -33,31 +44,31 @@ public class AddressService {
     }
 
     // UPDATE
-    public Address updateAddressById(Long addressId, Address address) {
+    public Address updateAddressById(Long addressId, AddressRequestDTO addressRequestDTO) {
 
         // Checks for persisted Address.
         Address existingAddress = addressRepository
                 .findById(addressId)
                 .orElseThrow(() -> new EntityNotFoundException(("Address not found with addressId: " + addressId)));
 
-        if (address.getLine1() != null && !address.getLine1().trim().isEmpty()) {
-            existingAddress.setLine1(address.getLine1().trim()); // Sets persisted Address with updated line1.
+        if (addressRequestDTO.getLine1() != null && !addressRequestDTO.getLine1().trim().isEmpty()) {
+            existingAddress.setLine1(addressRequestDTO.getLine1().trim()); // Sets persisted Address with updated line1.
         }
 
-        if (address.getLine2() != null && !address.getLine2().trim().isEmpty()) {
-            existingAddress.setLine2(address.getLine2().trim()); // Sets persisted Address with updated line2.
+        if (addressRequestDTO.getLine2() != null && !addressRequestDTO.getLine2().trim().isEmpty()) {
+            existingAddress.setLine2(addressRequestDTO.getLine2().trim()); // Sets persisted Address with updated line2.
         }
 
-        if (address.getCity() != null && !address.getCity().trim().isEmpty()) {
-            existingAddress.setCity(address.getCity().trim()); // Sets persisted Address with updated city.
+        if (addressRequestDTO.getCity() != null && !addressRequestDTO.getCity().trim().isEmpty()) {
+            existingAddress.setCity(addressRequestDTO.getCity().trim()); // Sets persisted Address with updated city.
         }
 
-        if (address.getCounty() != null && !address.getCounty().trim().isEmpty()) {
-            existingAddress.setCounty(address.getCounty().trim()); // Sets persisted Address with updated county.
+        if (addressRequestDTO.getCounty() != null && !addressRequestDTO.getCounty().trim().isEmpty()) {
+            existingAddress.setCounty(addressRequestDTO.getCounty().trim()); // Sets persisted Address with updated county.
         }
 
-        if (address.getPostcode() != null && !address.getPostcode().trim().isEmpty()) {
-            existingAddress.setPostcode(address.getPostcode().trim()); // Sets persisted Address with updated postcode.
+        if (addressRequestDTO.getPostcode() != null && !addressRequestDTO.getPostcode().trim().isEmpty()) {
+            existingAddress.setPostcode(addressRequestDTO.getPostcode().trim()); // Sets persisted Address with updated postcode.
         }
 
 //        if (Objects.nonNull(address.getPostcode()) && !"".equalsIgnoreCase(address.getPostcode())) {

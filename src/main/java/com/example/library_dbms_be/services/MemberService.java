@@ -1,5 +1,9 @@
 package com.example.library_dbms_be.services;
 
+import com.example.library_dbms_be.dtos.AddressRequestDTO;
+import com.example.library_dbms_be.dtos.MemberRequestDTO;
+import com.example.library_dbms_be.dtos.MemberResponseDTO;
+import com.example.library_dbms_be.mappers.MemberMapper;
 import com.example.library_dbms_be.models.Address;
 import com.example.library_dbms_be.models.Member;
 import com.example.library_dbms_be.repositories.AddressRepository;
@@ -22,7 +26,9 @@ public class MemberService {
     }
 
     // CREATE
-    public Member createMember(Member member) {
+    public MemberResponseDTO createMember(MemberRequestDTO memberRequestDTO) {
+
+        Member member = MemberMapper.toModel(memberRequestDTO);
 
         // Handles Member object's associated Address object.
         Address incomingAddress = member.getAddress();
@@ -41,7 +47,9 @@ public class MemberService {
         }
 
         // Creates a new row in memberRepository.
-        return memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
+
+        return MemberMapper.toMemberResponseDTO(savedMember);
     }
 
     // READ
@@ -63,35 +71,42 @@ public class MemberService {
     }
 
     // UPDATE
-    public Member updateMemberById(Long memberId, Member member) {
+    public Member updateMemberById(Long memberId, MemberRequestDTO memberRequestDTO) {
 
         // Checks for persisted Member.
         Member existingMember = memberRepository
                 .findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with memberId: " + memberId));
 
-        if (member.getName() != null && !member.getName().trim().isEmpty()) {
-            existingMember.setName(member.getName()); // Sets persisted Member with updated name.
+        if (memberRequestDTO.getName() != null && !memberRequestDTO.getName().trim().isEmpty()) {
+            existingMember.setName(memberRequestDTO.getName()); // Sets persisted Member with updated name.
         }
 
-        if (member.getEmail() != null && !member.getEmail().trim().isEmpty()) {
-            existingMember.setEmail(member.getEmail()); // Sets persisted Member with updated email.
+        if (memberRequestDTO.getEmail() != null && !memberRequestDTO.getEmail().trim().isEmpty()) {
+            existingMember.setEmail(memberRequestDTO.getEmail()); // Sets persisted Member with updated email.
         }
 
-        // Handles Member object's associated Address object.
-        Address incomingAddress = member.getAddress();
+        // Handles MemberRequestDTO object's associated AddressRequestDTO object.
+        AddressRequestDTO incomingAddressRequestDTO = memberRequestDTO.getAddress();
 
-        if (incomingAddress != null) {
+        if (incomingAddressRequestDTO != null) {
             // Checks for persisted Address.
             Optional<Address> existingAddress = addressRepository.findByLine1AndPostcode(
-                    incomingAddress.getLine1(),
-                    incomingAddress.getPostcode()
+                    incomingAddressRequestDTO.getLine1(),
+                    incomingAddressRequestDTO.getPostcode()
             );
 
             if (existingAddress.isPresent()) {
                 existingMember.setAddress(existingAddress.get()); // Sets persisted Member with persisted Address.
             } else {
-                Address savedAddress = addressRepository.save(incomingAddress); // Creates a new row in addressRepository.
+                Address newAddress = new Address();
+                newAddress.setLine1(incomingAddressRequestDTO.getLine1());
+                newAddress.setLine2(incomingAddressRequestDTO.getLine2());
+                newAddress.setCity(incomingAddressRequestDTO.getCity());
+                newAddress.setCounty(incomingAddressRequestDTO.getCounty());
+                newAddress.setPostcode(incomingAddressRequestDTO.getPostcode());
+
+                Address savedAddress = addressRepository.save(newAddress); // Creates a new row in addressRepository.
                 existingMember.setAddress(savedAddress); // Sets persisted Member with newly persisted Address.
             }
         }
