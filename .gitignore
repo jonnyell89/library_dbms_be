@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Prevent real config from being tracked
+src/main/resources/application.properties
