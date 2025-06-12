@@ -41,7 +41,7 @@ public class MemberController {
     }
 
     // GET http://localhost:8080/api/members/search?name=Jonny&email=jonny@email.com
-    @GetMapping("/search")
+    @GetMapping("/search") // ("/api/members/search")
     public MemberResponseDTO getMemberByNameAndEmail(@RequestParam String name, @RequestParam String email) {
         Member member = memberService.getMemberByNameAndEmail(name, email);
         return MemberMapper.toMemberResponseDTO(member);
