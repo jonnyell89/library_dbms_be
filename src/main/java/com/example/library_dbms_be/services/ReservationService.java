@@ -65,9 +65,9 @@ public class ReservationService {
                 .findById(reservationId)
                 .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + reservationId));
 
-        if (reservation.getStatus() != null) {
-            existingReservation.setStatus(reservation.getStatus()); // Sets persisted Reservation with updated status.
-        }
+//        if (reservation.getStatus() != null) {
+//            existingReservation.setStatus(reservation.getStatus()); // Sets persisted Reservation with updated status.
+//        }
 
         if (reservation.getStartDate() != null) {
             existingReservation.setStartDate(reservation.getStartDate()); // Sets persisted Reservation with updated startDate.

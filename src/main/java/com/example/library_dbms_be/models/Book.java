@@ -15,9 +15,9 @@ public class Book {
     @Column(name = "book_id")
     private Long bookId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "availability", nullable = false)
-    private Availability availability;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "availability", nullable = false)
+//    private Availability availability;
 
     @Column(name = "author", nullable = false)
     @JsonProperty("author_name")
@@ -53,13 +53,13 @@ public class Book {
         this.bookId = bookId;
     }
 
-    public Availability getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(Availability availability) {
-        this.availability = availability;
-    }
+//    public Availability getAvailability() {
+//        return availability;
+//    }
+//
+//    public void setAvailability(Availability availability) {
+//        this.availability = availability;
+//    }
 
     public String getAuthor() {
         return author;
@@ -121,7 +121,7 @@ public class Book {
     public String toString() {
         return "Book{" +
                 "bookId=" + bookId +
-                ", availability=" + availability +
+//                ", availability=" + availability +
                 ", author='" + author + '\'' +
                 ", title='" + title + '\'' +
                 ", authorKey='" + authorKey + '\'' +

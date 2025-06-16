@@ -40,9 +40,9 @@ public class BookService {
                 .findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException(("Book not found with bookId: " + bookId)));
 
-        if (book.getAvailability() != null) {
-            existingBook.setAvailability(book.getAvailability()); // Sets persisted Book with updated availability.
-        }
+//        if (book.getAvailability() != null) {
+//            existingBook.setAvailability(book.getAvailability()); // Sets persisted Book with updated availability.
+//        }
 
         if (book.getAuthor() != null && !book.getAuthor().trim().isEmpty()) {
             existingBook.setAuthor(book.getAuthor().trim()); // Sets persisted Book with updated author.

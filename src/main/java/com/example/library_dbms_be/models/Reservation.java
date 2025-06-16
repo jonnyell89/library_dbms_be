@@ -21,9 +21,9 @@ public class Reservation {
     @JsonIgnoreProperties("reservations") // Prevents infinite JSON loops.
     private Member member;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private Status status;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "status", nullable = false)
+//    private Status status;
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
@@ -52,13 +52,13 @@ public class Reservation {
         this.member = member;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
+//    public Status getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(Status status) {
+//        this.status = status;
+//    }
 
     public LocalDate getStartDate() {
         return startDate;
@@ -88,7 +88,7 @@ public class Reservation {
     public String toString() {
         return "Reservation{" +
                 "reservationId=" + reservationId +
-                ", status=" + status +
+//                ", status=" + status +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 '}'; // Reference to member and reservedBooks removed to prevent recursive conflict.

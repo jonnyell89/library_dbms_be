@@ -4,18 +4,22 @@ import com.example.library_dbms_be.enums.Availability;
 
 public class BookResponseDTO {
     private Long bookId;
-    private Availability availability;
     private String author;
     private String title;
+    private String authorKey;
+    private String titleKey;
+    private Integer firstPublishYear;
     private Integer cover;
 
     public BookResponseDTO() {};
 
-    public BookResponseDTO(Long bookId, Availability availability, String author, String title, Integer cover) {
+    public BookResponseDTO(Long bookId, String author, String title, String authorKey, String titleKey, Integer firstPublishYear, Integer cover) {
         this.bookId = bookId;
-        this.availability = availability;
         this.author = author;
         this.title = title;
+        this.authorKey = authorKey;
+        this.titleKey = titleKey;
+        this.firstPublishYear = firstPublishYear;
         this.cover = cover;
     }
 
@@ -25,14 +29,6 @@ public class BookResponseDTO {
 
     public void setBookId(Long bookId) {
         this.bookId = bookId;
-    }
-
-    public Availability getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(Availability availability) {
-        this.availability = availability;
     }
 
     public String getAuthor() {
@@ -51,6 +47,30 @@ public class BookResponseDTO {
         this.title = title;
     }
 
+    public String getAuthorKey() {
+        return authorKey;
+    }
+
+    public void setAuthorKey(String authorKey) {
+        this.authorKey = authorKey;
+    }
+
+    public String getTitleKey() {
+        return titleKey;
+    }
+
+    public void setTitleKey(String titleKey) {
+        this.titleKey = titleKey;
+    }
+
+    public Integer getFirstPublishYear() {
+        return firstPublishYear;
+    }
+
+    public void setFirstPublishYear(Integer firstPublishYear) {
+        this.firstPublishYear = firstPublishYear;
+    }
+
     public Integer getCover() {
         return cover;
     }
@@ -63,9 +83,11 @@ public class BookResponseDTO {
     public String toString() {
         return "BookResponseDTO{" +
                 "bookId=" + bookId +
-                ", availability=" + availability +
                 ", author='" + author + '\'' +
                 ", title='" + title + '\'' +
+                ", authorKey='" + authorKey + '\'' +
+                ", titleKey='" + titleKey + '\'' +
+                ", firstPublishYear=" + firstPublishYear +
                 ", cover=" + cover +
                 '}';
     }
