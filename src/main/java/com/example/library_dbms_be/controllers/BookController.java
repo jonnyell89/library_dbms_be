@@ -1,5 +1,8 @@
 package com.example.library_dbms_be.controllers;
 
+import com.example.library_dbms_be.dtos.BookRequestDTO;
+import com.example.library_dbms_be.dtos.BookResponseDTO;
+import com.example.library_dbms_be.mappers.BookMapper;
 import com.example.library_dbms_be.models.Book;
 import com.example.library_dbms_be.services.BookService;
 import org.springframework.web.bind.annotation.*;
@@ -18,25 +21,30 @@ public class BookController {
 
     // CREATE
     @PostMapping // ("/api/books")
-    public Book createBook(@RequestBody Book book) {
-        return bookService.createBook(book);
+    public BookResponseDTO createBook(@RequestBody BookRequestDTO bookRequestDTO) {
+        return bookService.createBook(bookRequestDTO);
     }
 
     // READ
     @GetMapping // ("/api/books")
-    public List<Book> getAllBooks() {
-        return bookService.getAllBooks();
-    }
+    public List<BookResponseDTO> getAllBooks() {
+        return bookService.getAllBooks()
+                .stream()
+                .map(BookMapper::toBookResponseDTO)
+                .toList();
+    } // Converting Book objects to DTOs -> Stream added with help from ChatGPT
 
     @GetMapping("/{bookId}") // ("/api/books/{bookId}")
-    public Book getBookById(@PathVariable Long bookId) {
-        return bookService.getBookById(bookId);
+    public BookResponseDTO getBookById(@PathVariable Long bookId) {
+        Book book = bookService.getBookById(bookId);
+        return BookMapper.toBookResponseDTO(book);
     }
 
     // UPDATE
     @PutMapping("/{bookId}") // ("/api/books/{bookId}")
-    public Book updateBookById(@PathVariable Long bookId, @RequestBody Book book) {
-        return bookService.updateBookById(bookId, book);
+    public BookResponseDTO updateBookById(@PathVariable Long bookId, @RequestBody BookRequestDTO bookRequestDTO) {
+        Book book = bookService.updateBookById(bookId, bookRequestDTO);
+        return BookMapper.toBookResponseDTO(book);
     }
 
     // DELETE

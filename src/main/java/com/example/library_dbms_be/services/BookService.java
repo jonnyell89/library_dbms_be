@@ -1,5 +1,8 @@
 package com.example.library_dbms_be.services;
 
+import com.example.library_dbms_be.dtos.BookRequestDTO;
+import com.example.library_dbms_be.dtos.BookResponseDTO;
+import com.example.library_dbms_be.mappers.BookMapper;
 import com.example.library_dbms_be.models.Book;
 import com.example.library_dbms_be.repositories.BookRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,8 +20,16 @@ public class BookService {
     }
 
     // CREATE
-    public Book createBook(Book book) {
-        return bookRepository.save(book);
+    public BookResponseDTO createBook(BookRequestDTO bookRequestDTO) {
+
+        // Maps the bookRequestDTO to a Book object.
+        Book book = BookMapper.toModel(bookRequestDTO);
+
+        // Saves the Book object to the bookRepository.
+        Book savedBook = bookRepository.save(book);
+
+        // Maps the Book object to a BookResponseDTO.
+        return BookMapper.toBookResponseDTO(savedBook);
     }
 
     // READ
@@ -33,7 +44,7 @@ public class BookService {
     }
 
     // UPDATE
-    public Book updateBookById(Long bookId, Book book) {
+    public Book updateBookById(Long bookId, BookRequestDTO bookRequestDTO) {
 
         // Checks for persisted Book.
         Book existingBook = bookRepository
@@ -44,28 +55,28 @@ public class BookService {
 //            existingBook.setAvailability(book.getAvailability()); // Sets persisted Book with updated availability.
 //        }
 
-        if (book.getAuthor() != null && !book.getAuthor().trim().isEmpty()) {
-            existingBook.setAuthor(book.getAuthor().trim()); // Sets persisted Book with updated author.
+        if (bookRequestDTO.getAuthor() != null && !bookRequestDTO.getAuthor().trim().isEmpty()) {
+            existingBook.setAuthor(bookRequestDTO.getAuthor().trim()); // Sets persisted Book with updated author.
         }
 
-        if (book.getTitle() != null && !book.getTitle().trim().isEmpty()) {
-            existingBook.setTitle(book.getTitle().trim()); // Sets persisted Book with updated title.
+        if (bookRequestDTO.getTitle() != null && !bookRequestDTO.getTitle().trim().isEmpty()) {
+            existingBook.setTitle(bookRequestDTO.getTitle().trim()); // Sets persisted Book with updated title.
         }
 
-        if (book.getAuthorKey() != null && !book.getAuthorKey().trim().isEmpty()) {
-            existingBook.setAuthorKey(book.getAuthorKey().trim()); // Sets persisted Book with updated authorKey.
+        if (bookRequestDTO.getAuthorKey() != null && !bookRequestDTO.getAuthorKey().trim().isEmpty()) {
+            existingBook.setAuthorKey(bookRequestDTO.getAuthorKey().trim()); // Sets persisted Book with updated authorKey.
         }
 
-        if (book.getTitleKey() != null && !book.getTitleKey().trim().isEmpty()) {
-            existingBook.setTitleKey(book.getTitleKey().trim()); // Sets persisted Book with updated titleKey.
+        if (bookRequestDTO.getTitleKey() != null && !bookRequestDTO.getTitleKey().trim().isEmpty()) {
+            existingBook.setTitleKey(bookRequestDTO.getTitleKey().trim()); // Sets persisted Book with updated titleKey.
         }
 
-        if (book.getFirstPublishYear() != null) {
-            existingBook.setFirstPublishYear(book.getFirstPublishYear()); // Sets persisted Book with updated firstPublishYear.
+        if (bookRequestDTO.getFirstPublishYear() != null) {
+            existingBook.setFirstPublishYear(bookRequestDTO.getFirstPublishYear()); // Sets persisted Book with updated firstPublishYear.
         }
 
-        if (book.getCover() != null) {
-            existingBook.setCover(book.getCover()); // Sets persisted Book with updated cover.
+        if (bookRequestDTO.getCover() != null) {
+            existingBook.setCover(bookRequestDTO.getCover()); // Sets persisted Book with updated cover.
         }
 
         // Creates a new row, or updates an existing row, in bookRepository.
