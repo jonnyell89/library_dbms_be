@@ -1,5 +1,8 @@
 package com.example.library_dbms_be.services;
 
+import com.example.library_dbms_be.dtos.ReservationRequestDTO;
+import com.example.library_dbms_be.dtos.ReservationResponseDTO;
+import com.example.library_dbms_be.mappers.ReservationMapper;
 import com.example.library_dbms_be.models.Member;
 import com.example.library_dbms_be.models.Reservation;
 import com.example.library_dbms_be.repositories.MemberRepository;
@@ -22,43 +25,45 @@ public class ReservationService {
     }
 
     // CREATE
-    public Reservation createReservation(Reservation reservation) {
+    public ReservationResponseDTO createReservation(ReservationRequestDTO reservationRequestDTO) {
 
-        // Handles Reservation object's associated Member object.
-        Member incomingMember = reservation.getMember();
+        // Checks for persisted Member.
+        Long memberId = reservationRequestDTO.getMemberId();
+        Member incomingMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with memberID: " + memberId));
 
-        if (incomingMember != null && incomingMember.getName() != null && incomingMember.getEmail() != null) {
-            // Checks for persisted Member.
-            Optional<Member> existingMember = memberRepository.findByNameAndEmail(
-                    incomingMember.getName(),
-                    incomingMember.getEmail()
-            );
+        // Maps the reservationRequestDTO to a Reservation object.
+        Reservation reservation = ReservationMapper.toModel(reservationRequestDTO);
 
-            if (existingMember.isPresent()) {
-                reservation.setMember(existingMember.get()); // Sets Reservation with persisted Member.
-            } else {
-                Member savedMember = memberRepository.save(incomingMember); // Creates a new row in memberRepository.
-                reservation.setMember(savedMember); // Sets Reservation with newly persisted Member.
-            }
-        }
+        // Sets Reservation with persisted Member.
+        reservation.setMember(incomingMember);
 
-        // Creates a new row in reservationRepository.
-        return reservationRepository.save(reservation);
+        // Saves the Reservation object to the reservationRepository.
+        Reservation savedReservation = reservationRepository.save(reservation);
+
+        // Maps the Reservation object to a ReservationResponseDTO.
+        return ReservationMapper.toReservationResponseDTO(savedReservation);
     }
 
     // READ
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+    public List<ReservationResponseDTO> getAllReservations() {
+
+        return reservationRepository.findAll()
+                .stream()
+                .map(ReservationMapper::toReservationResponseDTO)
+                .toList();
     }
 
-    public Reservation getReservationById(Long reservationId) {
-        return reservationRepository
-                .findById(reservationId)
+    public ReservationResponseDTO getReservationById(Long reservationId) {
+
+        Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + reservationId));
+
+        return ReservationMapper.toReservationResponseDTO(reservation);
     }
 
     // UPDATE
-    public Reservation updateReservationById(Long reservationId, Reservation reservation) {
+    public ReservationResponseDTO updateReservationById(Long reservationId, ReservationRequestDTO reservationRequestDTO) {
 
         // Checks for persisted Reservation.
         Reservation existingReservation = reservationRepository
@@ -69,16 +74,19 @@ public class ReservationService {
 //            existingReservation.setStatus(reservation.getStatus()); // Sets persisted Reservation with updated status.
 //        }
 
-        if (reservation.getStartDate() != null) {
-            existingReservation.setStartDate(reservation.getStartDate()); // Sets persisted Reservation with updated startDate.
+        if (reservationRequestDTO.getStartDate() != null) {
+            existingReservation.setStartDate(reservationRequestDTO.getStartDate()); // Sets persisted Reservation with updated startDate.
         }
 
-        if (reservation.getEndDate() != null) {
-            existingReservation.setEndDate(reservation.getEndDate()); // Sets persisted Reservation with updated endDate.
+        if (reservationRequestDTO.getEndDate() != null) {
+            existingReservation.setEndDate(reservationRequestDTO.getEndDate()); // Sets persisted Reservation with updated endDate.
         }
 
         // Creates a new row, or updates an existing row, in reservationRepository.
-        return reservationRepository.save(existingReservation);
+        Reservation updatedReservation = reservationRepository.save(existingReservation);
+
+        // Maps the Reservation object to a ReservationResponseDTO.
+        return ReservationMapper.toReservationResponseDTO(updatedReservation);
     }
 
     // DELETE

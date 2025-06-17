@@ -1,5 +1,7 @@
 package com.example.library_dbms_be.controllers;
 
+import com.example.library_dbms_be.dtos.ReservationRequestDTO;
+import com.example.library_dbms_be.dtos.ReservationResponseDTO;
 import com.example.library_dbms_be.models.Reservation;
 import com.example.library_dbms_be.services.ReservationService;
 import org.springframework.web.bind.annotation.*;
@@ -18,25 +20,25 @@ public class ReservationController {
 
     // CREATE
     @PostMapping // ("/api/reservations")
-    public Reservation createReservation(@RequestBody Reservation reservation) {
-        return reservationService.createReservation(reservation);
+    public ReservationResponseDTO createReservation(@RequestBody ReservationRequestDTO reservationRequestDTO) {
+        return reservationService.createReservation(reservationRequestDTO);
     }
 
     // READ
     @GetMapping // ("/api/reservations")
-    public List<Reservation> getAllReservations() {
+    public List<ReservationResponseDTO> getAllReservations() {
         return reservationService.getAllReservations();
     }
 
     @GetMapping("/{reservationId}") // ("/api/reservations/{reservationId}")
-    public Reservation getReservationById(@PathVariable Long reservationId) {
+    public ReservationResponseDTO getReservationById(@PathVariable Long reservationId) {
         return reservationService.getReservationById(reservationId);
     }
 
     // UPDATE
     @PutMapping("/{reservationId}") // ("/api/reservations/{reservationId}")
-    public Reservation updateReservationById(@PathVariable Long reservationId, @RequestBody Reservation reservation) {
-        return reservationService.updateReservationById(reservationId, reservation);
+    public ReservationResponseDTO updateReservationById(@PathVariable Long reservationId, @RequestBody ReservationRequestDTO reservationRequestDTO) {
+        return reservationService.updateReservationById(reservationId, reservationRequestDTO);
     }
 
     // DELETE
