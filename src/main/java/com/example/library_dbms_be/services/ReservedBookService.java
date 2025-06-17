@@ -1,5 +1,8 @@
 package com.example.library_dbms_be.services;
 
+import com.example.library_dbms_be.dtos.ReservedBookRequestDTO;
+import com.example.library_dbms_be.dtos.ReservedBookResponseDTO;
+import com.example.library_dbms_be.mappers.ReservedBookMapper;
 import com.example.library_dbms_be.models.Book;
 import com.example.library_dbms_be.models.Reservation;
 import com.example.library_dbms_be.models.ReservedBook;
@@ -25,81 +28,122 @@ public class ReservedBookService {
     }
 
     // CREATE
-    public ReservedBook createReservedBook(ReservedBook reservedBook) {
+    public ReservedBookResponseDTO createReservedBook(ReservedBookRequestDTO reservedBookRequestDTO) {
 
-        // Handles ReservedBook object's associated Reservation object.
-        Reservation incomingReservation = reservedBook.getReservation();
+        // Checks for persisted Reservation.
+        Reservation reservation = reservationRepository.findById(reservedBookRequestDTO.getReservationId())
+                .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + reservedBookRequestDTO.getReservationId()));
 
-        if (incomingReservation != null && incomingReservation.getReservationId() != null) {
-            // Checks for persisted Reservation.
-            Reservation existingReservation = reservationRepository
-                    .findById(incomingReservation.getReservationId())
-                    .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + incomingReservation.getReservationId()));
+        // Checks for persisted Book.
+        Book book = bookRepository.findById(reservedBookRequestDTO.getBookId())
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with bookId: " + reservedBookRequestDTO.getBookId()));
 
-            reservedBook.setReservation(existingReservation); // Sets ReservedBook with persisted Reservation.
-        }
+        // Maps reservedBookRequestDTO to a reservedBook object.
+        ReservedBook reservedBook = ReservedBookMapper.toModel(reservedBookRequestDTO, reservation, book);
 
-        // Handles ReservedBook object's associated Book object.
-        Book incomingBook = reservedBook.getBook();
+        // Saves the ReservedBook object to the reservedBookRepository.
+        ReservedBook savedReservedBook = reservedBookRepository.save(reservedBook);
 
-        if (incomingBook != null && incomingBook.getBookId() != null) {
-            // Checks for persisted Book.
-            Book existingBook = bookRepository
-                    .findById(incomingBook.getBookId())
-                    .orElseThrow(() -> new EntityNotFoundException("Book not found with bookId: " + incomingBook.getBookId()));
-
-            reservedBook.setBook(existingBook); // Sets ReservedBook with persisted Book.
-        }
-
-        // Creates a new row in reservedBookRepository.
-        return reservedBookRepository.save(reservedBook);
+        // Maps the ReservedBook object to a ReservedBookResponseDTO.
+        return ReservedBookMapper.toReservedBookResponseDTO(savedReservedBook);
     }
+
+//        // Handles ReservedBook object's associated Reservation object.
+//        Reservation incomingReservation = reservedBook.getReservation();
+//
+//        if (incomingReservation != null && incomingReservation.getReservationId() != null) {
+//            // Checks for persisted Reservation.
+//            Reservation existingReservation = reservationRepository
+//                    .findById(incomingReservation.getReservationId())
+//                    .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + incomingReservation.getReservationId()));
+//
+//            reservedBook.setReservation(existingReservation); // Sets ReservedBook with persisted Reservation.
+//        }
+//
+//        // Handles ReservedBook object's associated Book object.
+//        Book incomingBook = reservedBook.getBook();
+//
+//        if (incomingBook != null && incomingBook.getBookId() != null) {
+//            // Checks for persisted Book.
+//            Book existingBook = bookRepository
+//                    .findById(incomingBook.getBookId())
+//                    .orElseThrow(() -> new EntityNotFoundException("Book not found with bookId: " + incomingBook.getBookId()));
+//
+//            reservedBook.setBook(existingBook); // Sets ReservedBook with persisted Book.
+//        }
+//
+//        // Creates a new row in reservedBookRepository.
+//        return reservedBookRepository.save(reservedBook);
+//    }
 
     // READ
-    public List<ReservedBook> getAllReservedBooks() {
-        return reservedBookRepository.findAll();
+    public List<ReservedBookResponseDTO> getAllReservedBooks() {
+
+        return reservedBookRepository.findAll()
+                .stream()
+                .map(ReservedBookMapper::toReservedBookResponseDTO)
+                .toList();
     }
 
-    public ReservedBook getReservedBookById(Long reservedBookId) {
-        return reservedBookRepository
-                .findById(reservedBookId)
+    public ReservedBookResponseDTO getReservedBookById(Long reservedBookId) {
+
+        ReservedBook reservedBook = reservedBookRepository.findById(reservedBookId)
                 .orElseThrow(() -> new EntityNotFoundException("ReservedBook not found with reservedBookId: " + reservedBookId));
+
+        return ReservedBookMapper.toReservedBookResponseDTO(reservedBook);
     }
 
 
     // UPDATE
-    public ReservedBook updateReservedBookById(Long reservedBookId, ReservedBook reservedBook) {
+    public ReservedBookResponseDTO updateReservedBookById(Long reservedBookId, ReservedBookRequestDTO reservedBookRequestDTO) {
 
+        // Checks for persisted ReservedBook.
         ReservedBook existingReservedBook = reservedBookRepository
                 .findById(reservedBookId)
                 .orElseThrow(() -> new EntityNotFoundException("ReservedBook not found with reservedBookId: " + reservedBookId));
 
-        // Handles ReservedBook object's associated Reservation object.
-        Reservation incomingReservation = reservedBook.getReservation();
+        Reservation existingReservation = reservationRepository.findById(reservedBookRequestDTO.getReservationId())
+                .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + reservedBookRequestDTO.getReservationId()));
 
-        if (incomingReservation != null && incomingReservation.getReservationId() != null) {
-            // Checks for persisted Reservation.
-            Reservation existingReservation = reservationRepository
-                    .findById(incomingReservation.getReservationId())
-                    .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + incomingReservation.getReservationId()));
+        existingReservedBook.setReservation(existingReservation);
 
-            existingReservedBook.setReservation(existingReservation); // Sets ReservedBook with persisted Reservation.
-        }
+        Book existingBook = bookRepository.findById(reservedBookRequestDTO.getBookId())
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with bookId: " + reservedBookRequestDTO.getBookId()));
 
-        // Handles ReservedBook object's associated Book object.
-        Book incomingBook = reservedBook.getBook();
-
-        if (incomingBook != null && incomingBook.getBookId() != null) {
-            // Checks for persisted Book.
-            Book existingBook = bookRepository
-                    .findById(incomingBook.getBookId())
-                    .orElseThrow(() -> new EntityNotFoundException("Book not found with bookId: " + incomingBook.getBookId()));
-
-            existingReservedBook.setBook(existingBook); // Sets ReservedBook with persisted Book.
-        }
+        existingReservedBook.setBook(existingBook);
 
         // Creates a new row, or updates an existing row, in reservedBookRepository.
-        return reservedBookRepository.save(existingReservedBook);
+        ReservedBook updatedReservedBook = reservedBookRepository.save(existingReservedBook);
+
+        // Maps the ReservedBook object to a ReservedBookResponseDTO.
+        return ReservedBookMapper.toReservedBookResponseDTO(updatedReservedBook);
+
+//        // Handles ReservedBook object's associated Reservation object.
+//        Reservation incomingReservation = reservedBook.getReservation();
+//
+//        if (incomingReservation != null && incomingReservation.getReservationId() != null) {
+//            // Checks for persisted Reservation.
+//            Reservation existingReservation = reservationRepository
+//                    .findById(incomingReservation.getReservationId())
+//                    .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + incomingReservation.getReservationId()));
+//
+//            existingReservedBook.setReservation(existingReservation); // Sets ReservedBook with persisted Reservation.
+//        }
+//
+//        // Handles ReservedBook object's associated Book object.
+//        Book incomingBook = reservedBook.getBook();
+//
+//        if (incomingBook != null && incomingBook.getBookId() != null) {
+//            // Checks for persisted Book.
+//            Book existingBook = bookRepository
+//                    .findById(incomingBook.getBookId())
+//                    .orElseThrow(() -> new EntityNotFoundException("Book not found with bookId: " + incomingBook.getBookId()));
+//
+//            existingReservedBook.setBook(existingBook); // Sets ReservedBook with persisted Book.
+//        }
+//
+//        // Creates a new row, or updates an existing row, in reservedBookRepository.
+//        return reservedBookRepository.save(existingReservedBook);
     }
 
     // DELETE

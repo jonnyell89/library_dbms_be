@@ -1,5 +1,7 @@
 package com.example.library_dbms_be.controllers;
 
+import com.example.library_dbms_be.dtos.ReservedBookRequestDTO;
+import com.example.library_dbms_be.dtos.ReservedBookResponseDTO;
 import com.example.library_dbms_be.models.ReservedBook;
 import com.example.library_dbms_be.services.ReservedBookService;
 import org.springframework.web.bind.annotation.*;
@@ -18,25 +20,25 @@ public class ReservedBookController {
 
     // CREATE
     @PostMapping // ("/api/reserved-books")
-    public ReservedBook createReservedBooks(@RequestBody ReservedBook reservedBook) {
-        return reservedBookService.createReservedBook(reservedBook);
+    public ReservedBookResponseDTO createReservedBooks(@RequestBody ReservedBookRequestDTO reservedBookRequestDTO) {
+        return reservedBookService.createReservedBook(reservedBookRequestDTO);
     }
 
     // READ
     @GetMapping // ("/api/reserved-books")
-    public List<ReservedBook> getAllReservedBooks() {
+    public List<ReservedBookResponseDTO> getAllReservedBooks() {
         return reservedBookService.getAllReservedBooks();
     }
 
     @GetMapping("/{reservedBookId}") // ("/api/reserved-books/{reservedBookId}")
-    public ReservedBook getReservedBookById(@PathVariable Long reservedBookId) {
+    public ReservedBookResponseDTO getReservedBookById(@PathVariable Long reservedBookId) {
         return reservedBookService.getReservedBookById(reservedBookId);
     }
 
     // UPDATE
     @PutMapping("/{reservedBookId}") // ("/api/reserved-books/{reservedBookId}")
-    public ReservedBook updateReservedBook(@PathVariable Long reservedBookId, @RequestBody ReservedBook reservedBook) {
-        return reservedBookService.updateReservedBookById(reservedBookId, reservedBook);
+    public ReservedBookResponseDTO updateReservedBook(@PathVariable Long reservedBookId, @RequestBody ReservedBookRequestDTO reservedBookRequestDTO) {
+        return reservedBookService.updateReservedBookById(reservedBookId, reservedBookRequestDTO);
     }
 
     // DELETE

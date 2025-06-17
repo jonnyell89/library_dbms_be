@@ -9,12 +9,7 @@ public class ReservationMapper {
 
     public static Reservation toModel(ReservationRequestDTO reservationRequestDTO) {
 
-        // Member is set explicitly inside the ReservationService.
-        // Member member = new Member();
-        // member.setMemberId(reservationRequestDTO.getMemberId());
-
         Reservation reservation = new Reservation();
-        // reservation.setMember(member);
         reservation.setStartDate(reservationRequestDTO.getStartDate());
         reservation.setEndDate(reservationRequestDTO.getEndDate());
 
