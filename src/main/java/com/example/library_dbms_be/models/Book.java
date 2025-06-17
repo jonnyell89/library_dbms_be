@@ -20,7 +20,6 @@ public class Book {
 //    private Availability availability;
 
     @Column(name = "author", nullable = false)
-    @JsonProperty("author_name")
     private String author;
 
     @Column(name = "title", nullable = false)
@@ -37,7 +36,6 @@ public class Book {
     private Integer firstPublishYear;
 
     @Column(name = "cover")
-    @JsonProperty("cover_i")
     private Integer cover;
 
     // Cascade deletes/updates reservations automatically when a member is removed.
