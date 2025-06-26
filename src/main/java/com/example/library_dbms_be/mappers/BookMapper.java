@@ -15,6 +15,7 @@ public class BookMapper {
         book.setTitleKey(bookRequestDTO.getTitleKey());
         book.setFirstPublishYear(bookRequestDTO.getFirstPublishYear());
         book.setCover(bookRequestDTO.getCover());
+        book.setCoverEditionKey((bookRequestDTO.getCoverEditionKey()));
 
         return book;
     }
@@ -29,6 +30,7 @@ public class BookMapper {
         bookResponseDTO.setTitleKey(book.getTitleKey());
         bookResponseDTO.setFirstPublishYear(book.getFirstPublishYear());
         bookResponseDTO.setCover(book.getCover());
+        bookResponseDTO.setCoverEditionKey(book.getCoverEditionKey());
 
         return bookResponseDTO;
     }

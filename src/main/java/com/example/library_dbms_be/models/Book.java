@@ -38,6 +38,9 @@ public class Book {
     @Column(name = "cover")
     private Integer cover;
 
+    @Column(name = "cover_edition_key")
+    private String coverEditionKey;
+
     // Cascade deletes/updates reservations automatically when a member is removed.
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     @JsonIgnore // Prevents recursive conflict with ReservedBook.book
@@ -107,6 +110,14 @@ public class Book {
         this.cover = cover;
     }
 
+    public String getCoverEditionKey() {
+        return coverEditionKey;
+    }
+
+    public void setCoverEditionKey(String coverEditionKey) {
+        this.coverEditionKey = coverEditionKey;
+    }
+
     public List<ReservedBook> getReservedBooks() {
         return reservedBooks;
     }
@@ -126,6 +137,7 @@ public class Book {
                 ", titleKey='" + titleKey + '\'' +
                 ", firstPublishYear=" + firstPublishYear +
                 ", cover=" + cover +
+                ", coverEditionKey='" + coverEditionKey + '\'' +
                 '}'; // Reference to reservedBooks removed to prevent recursive conflict.
     }
 }

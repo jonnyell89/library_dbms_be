@@ -10,10 +10,11 @@ public class BookResponseDTO {
     private String titleKey;
     private Integer firstPublishYear;
     private Integer cover;
+    private String coverEditionKey;
 
     public BookResponseDTO() {};
 
-    public BookResponseDTO(Long bookId, String author, String title, String authorKey, String titleKey, Integer firstPublishYear, Integer cover) {
+    public BookResponseDTO(Long bookId, String author, String title, String authorKey, String titleKey, Integer firstPublishYear, Integer cover, String coverEditionKey) {
         this.bookId = bookId;
         this.author = author;
         this.title = title;
@@ -21,6 +22,7 @@ public class BookResponseDTO {
         this.titleKey = titleKey;
         this.firstPublishYear = firstPublishYear;
         this.cover = cover;
+        this.coverEditionKey = coverEditionKey;
     }
 
     public Long getBookId() {
@@ -79,6 +81,14 @@ public class BookResponseDTO {
         this.cover = cover;
     }
 
+    public String getCoverEditionKey() {
+        return coverEditionKey;
+    }
+
+    public void setCoverEditionKey(String coverEditionKey) {
+        this.coverEditionKey = coverEditionKey;
+    }
+
     @Override
     public String toString() {
         return "BookResponseDTO{" +
@@ -89,6 +99,7 @@ public class BookResponseDTO {
                 ", titleKey='" + titleKey + '\'' +
                 ", firstPublishYear=" + firstPublishYear +
                 ", cover=" + cover +
+                ", coverEditionKey='" + coverEditionKey + '\'' +
                 '}';
     }
 }

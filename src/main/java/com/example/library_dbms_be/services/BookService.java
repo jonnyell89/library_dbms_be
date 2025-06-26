@@ -79,6 +79,10 @@ public class BookService {
             existingBook.setCover(bookRequestDTO.getCover()); // Sets persisted Book with updated cover.
         }
 
+        if (bookRequestDTO.getCoverEditionKey() != null) {
+            existingBook.setCoverEditionKey(bookRequestDTO.getCoverEditionKey()); // Sets persisted Book with updated coverEditionKey.
+        }
+
         // Creates a new row, or updates an existing row, in bookRepository.
         return bookRepository.save(existingBook);
     }
