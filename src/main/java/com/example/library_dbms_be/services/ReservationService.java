@@ -29,7 +29,8 @@ public class ReservationService {
 
         // Checks for persisted Member.
         Long memberId = reservationRequestDTO.getMemberId();
-        Member incomingMember = memberRepository.findById(memberId)
+        Member incomingMember = memberRepository
+                .findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with memberID: " + memberId));
 
         // Maps the reservationRequestDTO to a Reservation object.
@@ -48,17 +49,21 @@ public class ReservationService {
     // READ
     public List<ReservationResponseDTO> getAllReservations() {
 
-        return reservationRepository.findAll()
+        return reservationRepository
+                .findAll()
                 .stream()
                 .map(ReservationMapper::toReservationResponseDTO)
                 .toList();
-    }
+    } // Converting Reservation objects to ReservationResponseDTOs -> Stream added with help from ChatGPT
 
     public ReservationResponseDTO getReservationById(Long reservationId) {
 
-        Reservation reservation = reservationRepository.findById(reservationId)
+        // Checks for persisted Reservation.
+        Reservation reservation = reservationRepository
+                .findById(reservationId)
                 .orElseThrow(() -> new EntityNotFoundException("Reservation not found with reservationId: " + reservationId));
 
+        // Maps the Reservation object to a ReservationResponseDTO.
         return ReservationMapper.toReservationResponseDTO(reservation);
     }
 

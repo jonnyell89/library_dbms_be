@@ -20,7 +20,7 @@ public class ReservedBookController {
 
     // CREATE
     @PostMapping // ("/api/reserved-books")
-    public ReservedBookResponseDTO createReservedBooks(@RequestBody ReservedBookRequestDTO reservedBookRequestDTO) {
+    public ReservedBookResponseDTO createReservedBook(@RequestBody ReservedBookRequestDTO reservedBookRequestDTO) {
         return reservedBookService.createReservedBook(reservedBookRequestDTO);
     }
 

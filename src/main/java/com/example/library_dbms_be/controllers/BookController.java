@@ -28,23 +28,18 @@ public class BookController {
     // READ
     @GetMapping // ("/api/books")
     public List<BookResponseDTO> getAllBooks() {
-        return bookService.getAllBooks()
-                .stream()
-                .map(BookMapper::toBookResponseDTO)
-                .toList();
-    } // Converting Book objects to DTOs -> Stream added with help from ChatGPT
+        return bookService.getAllBooks();
+    }
 
     @GetMapping("/{bookId}") // ("/api/books/{bookId}")
     public BookResponseDTO getBookById(@PathVariable Long bookId) {
-        Book book = bookService.getBookById(bookId);
-        return BookMapper.toBookResponseDTO(book);
+        return bookService.getBookById(bookId);
     }
 
     // UPDATE
     @PutMapping("/{bookId}") // ("/api/books/{bookId}")
     public BookResponseDTO updateBookById(@PathVariable Long bookId, @RequestBody BookRequestDTO bookRequestDTO) {
-        Book book = bookService.updateBookById(bookId, bookRequestDTO);
-        return BookMapper.toBookResponseDTO(book);
+        return bookService.updateBookById(bookId, bookRequestDTO);
     }
 
     // DELETE

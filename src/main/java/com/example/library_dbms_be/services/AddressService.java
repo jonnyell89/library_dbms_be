@@ -33,18 +33,28 @@ public class AddressService {
     }
 
     // READ
-    public List<Address> getAllAddresses() {
-        return addressRepository.findAll();
-    }
+    public List<AddressResponseDTO> getAllAddresses() {
 
-    public Address getAddressById(Long addressId) {
         return addressRepository
+                .findAll()
+                .stream()
+                .map(AddressMapper::toAddressResponseDTO)
+                .toList();
+    } // Converting Address objects to AddressResponseDTOs -> Stream added with help from ChatGPT
+
+    public AddressResponseDTO getAddressById(Long addressId) {
+
+        // Checks for persisted Address.
+        Address address = addressRepository
                 .findById(addressId)
                 .orElseThrow(() -> new EntityNotFoundException("Address not found with addressId: " + addressId));
+
+        // Maps the Address object to an AddressResponseDTO.
+        return AddressMapper.toAddressResponseDTO(address);
     }
 
     // UPDATE
-    public Address updateAddressById(Long addressId, AddressRequestDTO addressRequestDTO) {
+    public AddressResponseDTO updateAddressById(Long addressId, AddressRequestDTO addressRequestDTO) {
 
         // Checks for persisted Address.
         Address existingAddress = addressRepository
@@ -76,7 +86,10 @@ public class AddressService {
 //        }
 
         // Creates a new row, or updates an existing row, in addressRepository.
-        return addressRepository.save(existingAddress);
+        Address updatedAddress = addressRepository.save(existingAddress);
+
+        // Maps the Address object to an AddressResponseDTO.
+        return AddressMapper.toAddressResponseDTO(updatedAddress);
     }
 
     // DELETE

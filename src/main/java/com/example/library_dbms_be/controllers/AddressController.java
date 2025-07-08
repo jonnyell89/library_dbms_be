@@ -28,23 +28,18 @@ public class AddressController {
     // READ
     @GetMapping // ("/api/addresses")
     public List<AddressResponseDTO> getAllAddresses() {
-        return addressService.getAllAddresses()
-                .stream()
-                .map(AddressMapper::toAddressResponseDTO)
-                .toList();
-    } // Converting Address objects to DTOs -> Stream added with help from ChatGPT
+        return addressService.getAllAddresses();
+    }
 
     @GetMapping("/{addressId}") // ("/api/addresses/{addressId}")
     public AddressResponseDTO getAddressById(@PathVariable Long addressId) {
-        Address address = addressService.getAddressById(addressId);
-        return AddressMapper.toAddressResponseDTO(address);
+        return addressService.getAddressById(addressId);
     }
 
     // UPDATE
     @PutMapping("/{addressId}") // ("/api/addresses/{addressId}")
     public AddressResponseDTO updateAddressById(@PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO) {
-        Address address = addressService.updateAddressById(addressId, addressRequestDTO);
-        return AddressMapper.toAddressResponseDTO(address);
+        return addressService.updateAddressById(addressId, addressRequestDTO);
     }
 
     // DELETE

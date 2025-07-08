@@ -28,6 +28,7 @@ public class MemberService {
     // CREATE
     public MemberResponseDTO createMember(MemberRequestDTO memberRequestDTO) {
 
+        // Maps the MemberRequestDTO to a Member object.
         Member member = MemberMapper.toModel(memberRequestDTO);
 
         // Handles Member object's associated Address object.
@@ -49,29 +50,45 @@ public class MemberService {
         // Creates a new row in memberRepository.
         Member savedMember = memberRepository.save(member);
 
+        // Maps the Member object to a MemberResponseDTO.
         return MemberMapper.toMemberResponseDTO(savedMember);
     }
 
     // READ
-    public List<Member> getAllMembers() {
-        return memberRepository.findAll();
-    }
+    public List<MemberResponseDTO> getAllMembers() {
 
-    public Member getMemberById(Long memberId) {
         return memberRepository
+                .findAll()
+                .stream()
+                .map(MemberMapper::toMemberResponseDTO)
+                .toList();
+    } // Converting Member objects to MemberResponseDTOs -> Stream added with help from ChatGPT
+
+    public MemberResponseDTO getMemberById(Long memberId) {
+
+        // Checks for persisted Member.
+        Member member = memberRepository
                 .findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with memberId: " + memberId));
+
+        // Maps the Member object to a MemberResponseDTO.
+        return MemberMapper.toMemberResponseDTO(member);
     }
 
     // GET http://localhost:8080/api/members/search?name=Jonny&email=jonny@email.com
-    public Member getMemberByNameAndEmail(String name, String email) {
-        return memberRepository
+    public MemberResponseDTO getMemberByNameAndEmail(String name, String email) {
+
+        // Checks for persisted Member.
+        Member member = memberRepository
                 .findByNameAndEmail(name, email)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Member not found with name: %s, and email: %s", name, email)));
+
+        // Maps the Member object to a MemberResponseDTO.
+        return MemberMapper.toMemberResponseDTO(member);
     }
 
     // UPDATE
-    public Member updateMemberById(Long memberId, MemberRequestDTO memberRequestDTO) {
+    public MemberResponseDTO updateMemberById(Long memberId, MemberRequestDTO memberRequestDTO) {
 
         // Checks for persisted Member.
         Member existingMember = memberRepository
@@ -112,7 +129,10 @@ public class MemberService {
         }
 
         // Creates a new row, or updates an existing row, in memberRepository.
-        return memberRepository.save(existingMember);
+        Member updatedMember = memberRepository.save(existingMember);
+
+        // Maps the Member object to a MemberResponseDTO.
+        return MemberMapper.toMemberResponseDTO(updatedMember);
     }
 
     // DELETE

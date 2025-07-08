@@ -28,30 +28,24 @@ public class MemberController {
     // READ
     @GetMapping // ("/api/members")
     public List<MemberResponseDTO> getAllMembers() {
-        return memberService.getAllMembers()
-                .stream()
-                .map(MemberMapper::toMemberResponseDTO)
-                .toList();
-    } // Converting Member objects to DTOs -> Stream added with help from ChatGPT
+        return memberService.getAllMembers();
+    }
 
     @GetMapping("/{memberId}") // ("/api/members/{memberId}")
     public MemberResponseDTO getMemberById(@PathVariable Long memberId) {
-        Member member = memberService.getMemberById(memberId);
-        return MemberMapper.toMemberResponseDTO(member);
+        return memberService.getMemberById(memberId);
     }
 
     // GET http://localhost:8080/api/members/search?name=Jonny&email=jonny@email.com
     @GetMapping("/search") // ("/api/members/search")
     public MemberResponseDTO getMemberByNameAndEmail(@RequestParam String name, @RequestParam String email) {
-        Member member = memberService.getMemberByNameAndEmail(name, email);
-        return MemberMapper.toMemberResponseDTO(member);
+        return memberService.getMemberByNameAndEmail(name, email);
     }
 
     // UPDATE
     @PutMapping("/{memberId}") // ("/api/members/{memberId}")
     public MemberResponseDTO updateMemberById(@PathVariable Long memberId, @RequestBody MemberRequestDTO memberRequestDTO) {
-        Member member = memberService.updateMemberById(memberId, memberRequestDTO);
-        return MemberMapper.toMemberResponseDTO(member);
+        return memberService.updateMemberById(memberId, memberRequestDTO);
     }
 
     // DELETE

@@ -33,18 +33,28 @@ public class BookService {
     }
 
     // READ
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
-    }
+    public List<BookResponseDTO> getAllBooks() {
 
-    public Book getBookById(Long bookId) {
         return bookRepository
+                .findAll()
+                .stream()
+                .map(BookMapper::toBookResponseDTO)
+                .toList();
+    } // Converting Book objects to BookResponseDTOs -> Stream added with help from ChatGPT
+
+    public BookResponseDTO getBookById(Long bookId) {
+
+        // Checks for persisted Book.
+        Book book = bookRepository
                 .findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with bookId: " + bookId));
+
+        // Maps the Book object to a BookResponseDTO.
+        return BookMapper.toBookResponseDTO(book);
     }
 
     // UPDATE
-    public Book updateBookById(Long bookId, BookRequestDTO bookRequestDTO) {
+    public BookResponseDTO updateBookById(Long bookId, BookRequestDTO bookRequestDTO) {
 
         // Checks for persisted Book.
         Book existingBook = bookRepository
@@ -84,7 +94,10 @@ public class BookService {
         }
 
         // Creates a new row, or updates an existing row, in bookRepository.
-        return bookRepository.save(existingBook);
+        Book updatedBook = bookRepository.save(existingBook);
+
+        // Maps the Book object to a BookResponseDTO.
+        return BookMapper.toBookResponseDTO(updatedBook);
     }
 
     // DELETE
